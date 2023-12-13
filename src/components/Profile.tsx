@@ -29,6 +29,13 @@ interface ProfileInfo {
     officeNumber: string;
     extensionNumber: string;
     location: string;
+    profilePhoto: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
   };
 }
 
@@ -89,6 +96,10 @@ const Profile: React.FC = () => {
     }
   };
 
+  const getURL = (url: string): string => {
+    return url?.startsWith("/") ? "http://localhost:1337" + url : url;
+  };
+
   return (
     <div>
       {profileToDisplay ? (
@@ -103,8 +114,10 @@ const Profile: React.FC = () => {
               </div>
               <img
                 className="w-32 h-32 object-cover rounded-full shadow-md"
-                src="https://via.placeholder.com/150"
-                alt="Contact Avatar"
+                src={getURL(
+                  profileToDisplay.attributes.profilePhoto.data.attributes.url
+                )}
+                alt="Profile"
               />
               <div className="w-full divide-y divide-gray-300">
                 <div className="flex flex-col items-center pb-5">
@@ -133,7 +146,10 @@ const Profile: React.FC = () => {
                   </button>
 
                   {isConnectPopupVisible && (
-                    <ConnectPopup onClose={handleConnectClick} />
+                    <ConnectPopup
+                      onClose={handleConnectClick}
+                      profile={profileToDisplay}
+                    />
                   )}
                 </div>
               </div>

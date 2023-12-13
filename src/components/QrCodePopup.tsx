@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import QRCode from "react-qr-code";
 
 interface QrCodePopupProps {
   onClose: () => void;
@@ -20,15 +21,13 @@ const QrCodePopup: React.FC<QrCodePopupProps> = ({ onClose }) => {
     "shadow-sm"
   );
 
+  const currentURL = window.location.href;
+
   return (
     <div className="popup-overlay">
       <div className="popup-content">
-        {/* QR code component or image goes here */}
-        <img
-          src="https://via.placeholder.com/150"
-          alt="QR Code"
-          className="w-56 h-56 sm:w-64 sm:h-64 object-cover rounded-md shadow-sm"
-        />
+        {/* QR code component */}
+        <QRCode value={currentURL} size={224} />
         {/* Close button */}
         <button
           className={`border border-color-sky text-color-sky ex1 mt-3 ${buttonClass}`}
