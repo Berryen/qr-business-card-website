@@ -42,13 +42,9 @@ const Profile: React.FC = () => {
     "py-2",
     "text-base",
     "sm:text-lg",
-    "text-gray-700",
     "bg-white",
-    "border",
-    "border-gray-300",
     "rounded-md",
-    "shadow-sm",
-    "hover:bg-gray-100"
+    "shadow-sm"
   );
 
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
@@ -67,7 +63,7 @@ const Profile: React.FC = () => {
   const { slug } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:1337/api/profiles", {
+    fetch("http://localhost:1337/api/profiles?populate=*", {
       headers,
       method: "GET",
     })
@@ -92,19 +88,6 @@ const Profile: React.FC = () => {
         return countryName;
     }
   };
-
-  // useEffect(() => {
-  //   fetch("http://localhost:1337/api/profiles", {
-  //     headers,
-  //     method: "GET",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("Data from the API:", data);
-  //       setProfiles(data.data);
-  //     })
-  //     .catch((error) => console.error("Error fetching profiles:", error));
-  // }, []);
 
   return (
     <div>
@@ -137,10 +120,18 @@ const Profile: React.FC = () => {
                   </p>
                 </div>
                 <div className="w-full flex gap-5 pt-5">
-                  <button className={buttonClass}>Save Contact</button>
-                  <button className={buttonClass} onClick={handleConnectClick}>
+                  <button
+                    className={`border border-color-sky text-color-sky ex1 ${buttonClass}`}
+                  >
+                    Save Contact
+                  </button>
+                  <button
+                    className={`bg-color-sky text-white ex2 ${buttonClass}`}
+                    onClick={handleConnectClick}
+                  >
                     Connect
                   </button>
+
                   {isConnectPopupVisible && (
                     <ConnectPopup onClose={handleConnectClick} />
                   )}

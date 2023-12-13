@@ -15,13 +15,9 @@ const ConnectPopup: React.FC<ConnectPopupProps> = ({ onClose }) => {
     "py-2",
     "text-base",
     "sm:text-lg",
-    "text-gray-700",
     "bg-white",
-    "border",
-    "border-gray-300",
     "rounded-md",
-    "shadow-sm",
-    "hover:bg-gray-100"
+    "shadow-sm"
   );
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -94,10 +90,16 @@ const ConnectPopup: React.FC<ConnectPopupProps> = ({ onClose }) => {
 
         <div className="w-full flex gap-5 mt-5">
           {/* Close button */}
-          <button className={buttonClass} onClick={onClose}>
+          <button
+            className={`border border-color-sky text-color-sky ex1 ${buttonClass}`}
+            onClick={onClose}
+          >
             Close
           </button>
-          <button className={buttonClass} onClick={handleConnect}>
+          <button
+            className={`bg-color-sky text-white ex2 ${buttonClass}`}
+            onClick={handleConnect}
+          >
             Connect
           </button>
         </div>
