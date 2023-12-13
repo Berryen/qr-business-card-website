@@ -10,7 +10,7 @@
 
 .popup-content {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
@@ -24,3 +24,11 @@
     opacity: 1;
   }
 }
+
+.min-width {
+  min-width: 300px;
+}
+
+@import "~tailwindcss/base";
+@import "~tailwindcss/components";
+@import "~tailwindcss/utilities";

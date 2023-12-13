@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./Profile.css";
+import "../styles/global.css";
 import {
   Share2,
   Send,
@@ -11,6 +11,7 @@ import {
 } from "react-feather";
 import QrCodePopup from "./QrCodePopup";
 import ConnectPopup from "./ConnectPopup";
+import clsx from "clsx";
 
 interface ProfileInfo {
   id: number;
@@ -32,6 +33,24 @@ interface ProfileInfo {
 }
 
 const Profile: React.FC = () => {
+  const buttonClass = clsx(
+    "w-full",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "px-4",
+    "py-2",
+    "text-base",
+    "sm:text-lg",
+    "text-gray-700",
+    "bg-white",
+    "border",
+    "border-gray-300",
+    "rounded-md",
+    "shadow-sm",
+    "hover:bg-gray-100"
+  );
+
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
 
@@ -91,7 +110,7 @@ const Profile: React.FC = () => {
     <div>
       {profileToDisplay ? (
         <div className="min-h-screen bg-gray-100 py-5 sm:py-10 justify-center">
-          <div className="relative max-w-screen md:max-w-2xl mx-5 sm:mx-10 md:m-auto p-5 sm:p-10 bg-white shadow-lg rounded-3xl">
+          <div className="relative min-width max-w-screen md:max-w-2xl mx-5 sm:mx-10 md:m-auto p-5 sm:p-10 bg-white shadow-lg rounded-3xl">
             <div className="flex flex-col bg-gray-100 items-center rounded-3xl gap-5 p-5 mb-7">
               <div
                 className="absolute top-11 right-11 sm:top-16 sm:right-16 cursor-pointer"
@@ -118,13 +137,8 @@ const Profile: React.FC = () => {
                   </p>
                 </div>
                 <div className="w-full flex gap-5 pt-5">
-                  <button className="w-full inline-flex items-center justify-center px-4 py-2 text-base sm:text-lg text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100">
-                    Save Contact
-                  </button>
-                  <button
-                    className="w-full inline-flex items-center justify-center px-4 py-2 text-base sm:text-lg text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-100"
-                    onClick={handleConnectClick}
-                  >
+                  <button className={buttonClass}>Save Contact</button>
+                  <button className={buttonClass} onClick={handleConnectClick}>
                     Connect
                   </button>
                   {isConnectPopupVisible && (
