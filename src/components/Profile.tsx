@@ -100,6 +100,23 @@ const Profile: React.FC = () => {
     return url?.startsWith("/") ? "http://localhost:1337" + url : url;
   };
 
+  const formatMalaysianPhoneNumber = (phoneNumber: string): string => {
+    const isSpecialNumber = phoneNumber.startsWith("11");
+
+    // Define the desired segments based on whether it's a special number
+    const segments = isSpecialNumber ? [2, 4, 4] : [2, 3, 4];
+
+    let formattedNumber = "";
+    let index = 0;
+
+    segments.forEach((segment) => {
+      formattedNumber += phoneNumber.substr(index, segment) + " ";
+      index += segment;
+    });
+
+    return formattedNumber.trim(); // Remove trailing space
+  };
+
   return (
     <div>
       {profileToDisplay ? (
@@ -214,16 +231,18 @@ const Profile: React.FC = () => {
                   icon: <Smartphone color="#4b5563" />,
                   text: `(${getCountryCode(
                     profileToDisplay.attributes.countryCodeMobile
-                  )}) ${profileToDisplay.attributes.mobileNumber}`,
+                  )}) ${formatMalaysianPhoneNumber(
+                    profileToDisplay.attributes.mobileNumber
+                  )}`,
                 },
                 {
                   icon: <Phone color="#4b5563" />,
                   text: profileToDisplay.attributes.officeNumber
                     ? `(${getCountryCode(
                         profileToDisplay.attributes.countryCodeOffice
-                      )}) ${profileToDisplay.attributes.officeNumber} ext ${
-                        profileToDisplay.attributes.extensionNumber
-                      }`
+                      )}) ${formatMalaysianPhoneNumber(
+                        profileToDisplay.attributes.officeNumber
+                      )} ext ${profileToDisplay.attributes.extensionNumber}`
                     : `(${getCountryCode(
                         profileToDisplay.attributes.countryCodeOffice
                       )}) ${profileToDisplay.attributes.extensionNumber}`,
