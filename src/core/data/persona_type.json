@@ -1,0 +1,54 @@
+[
+  {
+    "value": "architect",
+    "label": "Architect"
+  },
+  {
+    "value": "consultant",
+    "label": "Consultant"
+  },
+  {
+    "value": "contractor",
+    "label": "Contractor"
+  },
+  {
+    "value": "engineer",
+    "label": "Engineer"
+  },
+  {
+    "value": "government_officials",
+    "label": "Government official"
+  },
+  {
+    "value": "home_owner",
+    "label": "Home owner"
+  },
+  {
+    "value": "interior_designer",
+    "label": "Interior designer"
+  },
+  {
+    "value": "media",
+    "label": "Media"
+  },
+  {
+    "value": "ngo",
+    "label": "NGO"
+  },
+  {
+    "value": "potential_employee",
+    "label": "Potential employee"
+  },
+  {
+    "value": "retailer",
+    "label": "Retailer"
+  },
+  {
+    "value": "student",
+    "label": "Student and lecturer"
+  },
+  {
+    "value": "others",
+    "label": "Others"
+  }
+]

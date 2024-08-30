@@ -1,0 +1,2 @@
+creation_rules:
+  - kms: arn:aws:kms:ap-southeast-1:780803205546:key/9a209a75-2994-4136-a854-79b5ba9c274a
