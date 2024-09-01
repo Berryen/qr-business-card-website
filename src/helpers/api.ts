@@ -6,7 +6,7 @@ import {
   serviceNowUsername,
 } from "config/constant";
 // import { localeTranslation } from "helpers/locale";
-import { putLogEvents } from "./cloudwatch";
+// import { putLogEvents } from "./cloudwatch";
 
 // compose & get strapi url with path
 export const getStrapiURL = (path = "") => {
@@ -50,7 +50,7 @@ export const fetchStrapiAPI = async (
     }
     return response.json();
   } catch (error) {
-    putLogEvents((error as Error).message + " || " + (error as Error).stack);
+    // putLogEvents((error as Error).message + " || " + (error as Error).stack);
   }
 };
 

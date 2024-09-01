@@ -60,6 +60,7 @@ export const Profile: React.FC<ProfileProps> = ({
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
+  console.log(profileData?.attributes.profilePhoto.data.attributes.url);
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -219,6 +220,11 @@ END:VCARD`;
     return formattedNumber.trim(); // Remove trailing space
   };
 
+  const profileURL = `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`;
+  console.log(
+    `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
+  );
+
   // ================= EFFECTS
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -331,16 +337,14 @@ END:VCARD`;
               >
                 <Share2 color="#505050" />
               </div>
-              <Image
+              <img
                 className="w-32 h-32 object-cover rounded-full shadow-md"
-                src={getStrapiMedia(
-                  profileData?.attributes.profilePhoto.data.attributes.url
-                )}
+                src={profileURL}
                 alt="Contact Avatar"
                 width={150}
                 height={150}
               />
-              <div className="w-full divide-y divide-gray-300">
+              <div className="w-full divide-y divide-. gray-300">
                 <div className="flex flex-col items-center pb-5">
                   <h1 className="text-lg sm:text-xl text-primary-gray">
                     {profileData?.attributes.name}
