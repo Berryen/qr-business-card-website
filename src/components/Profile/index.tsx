@@ -261,7 +261,7 @@ END:VCARD`;
       {/* Pass profileData to Meta component for setting meta information */}
       <Meta profile={profileData} />
       {/* Header */}
-      <div className="bg-white p-2.5 px-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
+      <div className="bg-secondary p-2.5 px-5 flex items-center justify-between fixed w-full top-0 z-10">
         <div className="flex w-full items-center justify-between">
           <div>
             <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
