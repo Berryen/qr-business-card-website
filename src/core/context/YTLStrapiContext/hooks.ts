@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { YTLStrapiDataProps } from "./@types";
 import { YTLStrapiDataContext } from "./context";
-import { putLogEvents } from "helpers/cloudwatch";
+// import { putLogEvents } from "helpers/cloudwatch";
 
 export const useYTLStrapiDataHook = <P = any, C = any>(): YTLStrapiDataProps<
   P,
