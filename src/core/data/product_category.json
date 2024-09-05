@@ -1,0 +1,37 @@
+[
+  {
+    "label": "Cement",
+    "value": "cement",
+    "division": "cement"
+  },
+  {
+    "label": "Concrete",
+    "value": "concrete",
+    "division": "concrete"
+  },
+  {
+    "label": "Aggregates",
+    "value": "aggregate",
+    "division": "quarry"
+  },
+  {
+    "label": "Drymix",
+    "value": "drymix",
+    "division": "drymix"
+  },
+  {
+    "label": "Waste management",
+    "value": "waste_management",
+    "division": "geo"
+  },
+  {
+    "label": "Green solutions",
+    "value": "green_solutions",
+    "division": "get"
+  },
+  {
+    "label": "DIY solutions",
+    "value": "diy_solutions",
+    "division": "drymix"
+  }
+]

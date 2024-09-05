@@ -1,0 +1,99 @@
+[
+  {
+    "name": "Malaysia",
+    "list": [
+      {
+        "value": "Johor",
+        "label": "Johor",
+        "code": "01"
+      },
+      {
+        "value": "Kedah",
+        "label": "Kedah",
+        "code": "02"
+      },
+      {
+        "value": "Kelantan",
+        "label": "Kelantan",
+        "code": "03"
+      },
+      {
+        "value": "Kuala_Lumpur",
+        "label": "Kuala Lumpur",
+        "code": "14"
+      },
+      {
+        "value": "Labuan",
+        "label": "Labuan",
+        "code": "15"
+      },
+      {
+        "value": "Malacca",
+        "label": "Malacca",
+        "code": "04"
+      },
+      {
+        "value": "Negeri_Sembilan",
+        "label": "Negeri Sembilan",
+        "code": "05"
+      },
+      {
+        "value": "Pahang",
+        "label": "Pahang",
+        "code": "06"
+      },
+      {
+        "value": "Penang",
+        "label": "Penang",
+        "code": "07"
+      },
+      {
+        "value": "Perak",
+        "label": "Perak",
+        "code": "08"
+      },
+      {
+        "value": "Perlis",
+        "label": "Perlis",
+        "code": "09"
+      },
+      {
+        "value": "Sabah",
+        "label": "Sabah",
+        "code": "12"
+      },
+      {
+        "value": "Sarawak",
+        "label": "Sarawak",
+        "code": "13"
+      },
+      {
+        "value": "Selangor",
+        "label": "Selangor",
+        "code": "10"
+      },
+      {
+        "value": "Terengganu",
+        "label": "Terengganu",
+        "code": "11"
+      }
+    ]
+  },
+  {
+    "name": "Other countries",
+    "list": [
+      {
+        "value": "Singapore",
+        "label": "Singapore"
+      },
+      {
+        "value": "Vietnam",
+        "label": "Vietnam"
+      },
+      {
+        "value": "Others",
+        "label": "Others"
+      }
+    ]
+  }
+]
