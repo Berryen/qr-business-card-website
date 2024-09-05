@@ -19,9 +19,14 @@ module.exports = {
       colors: {
         sky: "#0198d5",
         "primary-gray": "#505050",
+        primary: "#18181A",
+        secondary: "#1E1E20",
+        offgray: "#737379",
+        offwhite: "#DFDFDF",
+        stroke: "#555557",
       },
       fontFamily: {
-        sans: ['"Titillium Web"', '"Exo 2"'],
+        sans: ['"SF Pro Display"'],
       },
     },
   },

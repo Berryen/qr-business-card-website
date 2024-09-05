@@ -6,12 +6,12 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link
-            href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300;400;600;700&display=swap"
+            href="https://fonts.cdnfonts.com/css/sf-pro-display"
             rel="stylesheet"
             media="screen"
           />
           <link
-            href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;600;700&display=swap"
+            href="https://fonts.cdnfonts.com/css/sf-pro-display"
             rel="stylesheet"
             media="screen"
           />
