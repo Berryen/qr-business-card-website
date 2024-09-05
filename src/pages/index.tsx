@@ -9,11 +9,11 @@ export default function LandingPage() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-white p-2.5 pl-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
+      {/* <div className="bg-secondary p-2.5 pl-5 flex items-center justify-between border-b border-stroke fixed w-full top-0 z-10">
         <div className="flex items-center">
           <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
         </div>
-      </div>
+      </div> */}
       <ErrorStatus />
       {/* Footer */}
       <div className="bg-color-sky p-1"></div>
