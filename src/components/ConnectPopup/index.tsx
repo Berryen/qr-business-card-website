@@ -94,16 +94,16 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
     ...(profile.attributes.showWhatsapp && profile.attributes.mobileNumber
       ? [{ value: "whatsapp", label: "WhatsApp", icon: <WhatsAppIcon /> }]
       : []),
-    { value: "email", label: "Email", icon: <Mail color="#505050" /> },
+    { value: "email", label: "Email", icon: <Mail color="#555557" /> },
     ...(profile.attributes.mobileNumber
-      ? [{ value: "phone", label: "Phone", icon: <Phone color="#505050" /> }]
+      ? [{ value: "phone", label: "Phone", icon: <Phone color="#555557" /> }]
       : []),
     ...(profile.attributes.officeNumber
       ? [
           {
             value: "office",
             label: "Office",
-            icon: <Briefcase color="#505050" />,
+            icon: <Briefcase color="#555557" />,
           },
         ]
       : []),
@@ -112,7 +112,7 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
           {
             value: "linkedin",
             label: "LinkedIn",
-            icon: <Linkedin color="#505050" />,
+            icon: <Linkedin color="#555557" />,
           },
         ]
       : []),
@@ -138,19 +138,19 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
         {/* Popup content */}
         <div className="popup-content min-w-72 sm:min-w-96">
           <div className="flex w-full mb-3 justify-between">
-            <h2 className="text-xl sm:text-2xl">Connect with</h2>
+            <h2 className="text-offwhite text-xl sm:text-2xl">Connect with</h2>
           </div>
           <div className="grid grid-cols-3 gap-3 sm:gap-5">
             {connectionOptions.map((option) => (
               <div key={option.value} className="relative">
                 <a
-                  className={`flex flex-col w-full items-center cursor-pointer pt-5 pb-3 mb-2 mt-4 rounded-xl bg-gray-100 focus:bg-gray-200 hover:bg-gray-200 
+                  className={`flex flex-col w-full items-center cursor-pointer pt-5 pb-3 mb-2 mt-4 rounded-xl bg-primary border border-stroke hover:bg-secondary
                   ${selectedOption === option.value}`}
                   onClick={() => handleOptionChange(option.value)}
                 >
                   <div className="mb-2">{option.icon}</div>
                 </a>
-                <div className="absolute w-full text-center text-xs sm:text-sm text-gray-600">
+                <div className="absolute w-full text-center text-xs sm:text-sm text-offwhite">
                   {option.label}
                 </div>
               </div>
@@ -158,12 +158,14 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
           </div>
           <div className="flex flex-col">
             <div className="flex mt-12 mb-3 justify-between">
-              <h2 className="text-base sm:text-lg">Copy page link</h2>
+              <h2 className="text-offwhite text-base sm:text-lg">
+                Copy page link
+              </h2>
             </div>
             <div className="relative">
               <input
                 type="text"
-                className="w-full text-xs sm:text-sm text-gray-600 bg-gray-100 py-4 pl-4 pr-12 rounded-xl truncate"
+                className="w-full text-xs sm:text-sm text-offwhite bg-primary border border-stroke py-4 pl-4 pr-12 rounded-xl truncate"
                 value={currentUrl}
                 readOnly
               />
@@ -171,16 +173,16 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
                 onClick={handleCopyToClipboard}
               >
-                <Copy color="#505050" />
+                <Copy color="#555557" />
               </a>
             </div>
           </div>
         </div>
         <div
-          className="cursor-pointer mt-5 place-self-center bg-white bg-opacity-25 p-2 rounded-full focus:bg-opacity-30 hover:bg-opacity-30"
+          className="cursor-pointer mt-5 place-self-center bg-stroke bg-opacity-25 p-2 rounded-full focus:bg-opacity-30 hover:bg-opacity-30"
           onClick={onClose}
         >
-          <X color="#505050" size={24} />
+          <X color="#555557" size={24} />
         </div>
       </div>
     </div>

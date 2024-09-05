@@ -22,8 +22,11 @@ module.exports = {
         primary: "#18181A",
         secondary: "#1E1E20",
         offgray: "#737379",
-        offwhite: "#DFDFDF",
+        // offwhite: "#DFDFDF",
+        offwhite: "#CBCBCB",
         stroke: "#555557",
+        primarybutton: "#262628",
+        primaryhover: "#171718",
       },
       fontFamily: {
         sans: ['"SF Pro Display"'],

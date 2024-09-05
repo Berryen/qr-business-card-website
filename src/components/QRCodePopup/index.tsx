@@ -24,19 +24,6 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
   // ================= VARIABLES
   const currentURL = window.location.href;
   const ytl_logoString = ytl_logo.src;
-  const buttonClass = clsx(
-    "w-full",
-    "inline-flex",
-    "items-center",
-    "justify-center",
-    "px-4",
-    "py-2",
-    "text-base",
-    "sm:text-lg",
-    "bg-white",
-    "rounded-md",
-    "shadow-sm"
-  );
 
   // ================= EVENTS
   const generateQRCode = (): QRCodeStyling => {
@@ -44,10 +31,13 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
     const qrCode: QRCodeStyling = new QRCodeStyling({
       width: isMobileView ? 230 : 300,
       height: isMobileView ? 230 : 300,
-      image: ytl_logoString,
+      // image: ytl_logoString,
       data: currentURL,
+      backgroundOptions: {
+        color: "#1e1e20",
+      },
       dotsOptions: {
-        color: "#181818",
+        color: "#CBCBCB",
         type: "rounded",
       },
       imageOptions: {
@@ -117,9 +107,9 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
       {/* Container for popup content */}
       <div className="flex flex-col" onClick={(e) => e.stopPropagation()}>
         {/* Popup content */}
-        <div className="popup-content">
+        <div className="popup-content-qr">
           {/* QR code component */}
-          <div className="mb-4" id="qrcodeprint" ref={qrcodeRef} />
+          <div className="mb-5" id="qrcodeprint" ref={qrcodeRef} />
           {/* Copy link */}
           <div className="flex flex-col">
             {/* <div className="flex mb-3 justify-between">
@@ -128,7 +118,7 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
             <div className="relative">
               <input
                 type="text"
-                className="w-full text-xs sm:text-sm text-gray-600 bg-gray-100 py-4 pl-4 pr-12 rounded-xl truncate"
+                className="w-full text-xs sm:text-sm text-offwhite bg-primary border border-stroke py-4 pl-4 pr-12 rounded-xl truncate"
                 value={currentUrl}
                 readOnly
               />
@@ -136,7 +126,7 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
                 onClick={handleCopyToClipboard}
               >
-                <Copy color="#505050" />
+                <Copy color="#555557" />
               </a>
             </div>
           </div>
@@ -145,11 +135,11 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
             className="cursor-pointer mt-4 place-self-center rounded-xl pt-2"
             onClick={handleDownloadImage}
           >
-            <Download color="#505050" />
+            <Download color="#555557" />
           </button>
         </div>
         <div
-          className="cursor-pointer mt-5 place-self-center bg-white bg-opacity-25 p-2 rounded-full focus:bg-opacity-30 hover:bg-opacity-30"
+          className="cursor-pointer mt-5 place-self-center bg-stroke bg-opacity-25 p-2 rounded-full focus:bg-opacity-30 hover:bg-opacity-30"
           onClick={onClose}
         >
           <X color="#505050" size={24} />

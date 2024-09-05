@@ -106,9 +106,7 @@ export const Profile: React.FC<ProfileProps> = ({
     "py-2",
     "text-base",
     "sm:text-lg",
-    "bg-white",
-    "rounded-md",
-    "shadow-sm"
+    "rounded-lg"
   );
 
   // ================= EVENTS
@@ -261,7 +259,7 @@ END:VCARD`;
       {/* Pass profileData to Meta component for setting meta information */}
       <Meta profile={profileData} />
       {/* Header */}
-      <div className="bg-secondary p-2.5 px-5 flex items-center justify-between fixed w-full top-0 z-10">
+      <div className="bg-secondary border-b border-stroke p-2.5 px-5 flex items-center justify-between fixed w-full top-0 z-10">
         <div className="flex w-full items-center justify-between">
           <div>
             <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
@@ -269,7 +267,7 @@ END:VCARD`;
           {globalAttr?.enableLanguageSwitcher && (
             <div className="flex gap-1 text-base sm:text-lg">
               <p
-                className={`text-primary-gray hover:text-sky cursor-pointer ${
+                className={`text-offwhite hover:text-sky cursor-pointer ${
                   router.locale === "en" ? "text-blue-500" : ""
                 }`}
                 onClick={() =>
@@ -282,7 +280,7 @@ END:VCARD`;
               </p>
               |
               <p
-                className={`text-primary-gray hover:text-sky cursor-pointer ${
+                className={`text-offwhite hover:text-sky cursor-pointer ${
                   router.locale === "bm" ? "text-blue-500" : ""
                 }`}
                 onClick={() =>
@@ -295,7 +293,7 @@ END:VCARD`;
               </p>
               |
               <p
-                className={`text-primary-gray hover:text-sky cursor-pointer ${
+                className={`text-offwhite hover:text-sky cursor-pointer ${
                   router.locale === "vi" ? "text-blue-500" : ""
                 }`}
                 onClick={() =>
@@ -312,59 +310,60 @@ END:VCARD`;
       </div>
       {isLoading ? (
         <>
-          <div className="bg-white p-2.5 pl-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
+          <div className="bg-secondary border border-stroke p-2.5 pl-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
             <div className="flex items-center">
               <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
             </div>
           </div>
-          <div className="min-h-screen sm:bg-gray-100 pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
-            <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-white sm:shadow-lg sm:rounded-3xl">
-              <Skeleton className="flex flex-col bg-gray-100 rounded-3xl h-80" />
+          {/* Skeleton */}
+          <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
+            <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary border border-stroke sm:shadow-lg sm:rounded-2xl">
+              <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
               <Skeleton
                 count={4}
-                className="flex flex-col bg-gray-100 rounded-3xl h-14"
+                className="flex flex-col bg-primary rounded-2xl h-14"
               />
             </div>
           </div>
         </>
       ) : profileData ? (
-        <div className="min-h-screen sm:bg-gray-100 pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
-          <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-white sm:shadow-lg sm:rounded-3xl">
-            <div className="flex flex-col bg-gray-100 items-center rounded-3xl gap-5 p-5 mb-7">
+        <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
+          <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary border border-stroke sm:rounded-2xl">
+            <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
               <div
                 className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
                 onClick={handleShareClick}
               >
-                <Share2 color="#505050" />
+                <Share2 color="#555557" />
               </div>
               <img
-                className="w-32 h-32 object-cover rounded-full shadow-md"
+                className="w-32 h-32 object-cover rounded-full"
                 src={profileURL}
                 alt="Contact Avatar"
                 width={150}
                 height={150}
               />
-              <div className="w-full divide-y divide-. gray-300">
+              <div className="w-full divide-y divide-. divide-stroke">
                 <div className="flex flex-col items-center pb-5">
-                  <h1 className="text-lg sm:text-xl text-primary-gray">
+                  <h1 className="text-lg sm:text-xl text-offwhite">
                     {profileData?.attributes.name}
                   </h1>
-                  <p className="text-base sm:text-lg text-primary-gray">
+                  <p className="text-base sm:text-lg text-offwhite">
                     {profileData?.attributes.jobTitle}
                   </p>
-                  <p className="text-base sm:text-lg text-primary-gray">
+                  <p className="text-base sm:text-lg text-offwhite">
                     {profileData?.attributes.company}
                   </p>
                 </div>
                 <div className="w-full flex gap-5 pt-5">
                   <button
-                    className={`border border-color-sky text-sky ex1 ${buttonClass}`}
+                    className={`bg-primarybutton border border-stroke text-offwhite ex1 ${buttonClass}`}
                     onClick={saveContact}
                   >
                     Save Contact
                   </button>
                   <button
-                    className={`bg-color-sky text-white ex2 ${buttonClass}`}
+                    className={`bg-secondary border border-stroke text-offwhite ex2  ${buttonClass}`}
                     onClick={handleConnectClick}
                   >
                     Connect
@@ -388,22 +387,22 @@ END:VCARD`;
             )}
             {profileData?.attributes.about && (
               <>
-                <div className="flex flex-col mx-5 mb-7">
-                  <h2 className="text-xl sm:text-2xl mb-2 text-primary-gray">
+                <div className="flex flex-col mx-3 mb-7">
+                  <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
                     {getTranslation("About")}
                   </h2>
-                  <p className="text-base sm:text-lg text-primary-gray">
+                  <p className="text-base sm:text-lg text-offwhite">
                     {profileData?.attributes.about}
                   </p>
                 </div>
               </>
             )}
-            <div className="flex flex-col mx-5 divide-y divide-gray-300">
+            <div className="flex flex-col mx-3 divide-y divide-stroke">
               <div className="inline-flex">
                 <div className="pl-2 pr-4 self-center">
-                  <Mail color="#505050" />
+                  <Mail color="#555557" />
                 </div>
-                <div className="text-base sm:text-lg text-primary-gray py-3 truncate">
+                <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                   {profileData?.attributes.emailId}
                   {profileData?.attributes.domain}
                 </div>
@@ -412,9 +411,9 @@ END:VCARD`;
                 profileData?.attributes.countryCodeMobile && (
                   <div className="inline-flex">
                     <div className="pl-2 pr-4 self-center">
-                      <Smartphone color="#505050" />
+                      <Smartphone color="#555557" />
                     </div>
-                    <div className="text-base sm:text-lg text-primary-gray py-3 truncate">
+                    <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                       {profileData?.attributes.mobileNumber
                         ? `(${getCountryCode(
                             profileData?.attributes.countryCodeMobile
@@ -429,9 +428,9 @@ END:VCARD`;
                 profileData?.attributes.countryCodeOffice && (
                   <div className="inline-flex">
                     <div className="pl-2 pr-4 self-center">
-                      <Phone color="#505050" />
+                      <Phone color="#555557" />
                     </div>
-                    <div className="text-base sm:text-lg text-primary-gray py-3 truncate">
+                    <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                       {profileData?.attributes.officeNumber
                         ? `(${getCountryCode(
                             profileData?.attributes.countryCodeOffice
@@ -449,9 +448,9 @@ END:VCARD`;
               {profileData?.attributes.linkedIn && (
                 <div className="inline-flex">
                   <div className="pl-2 pr-4 pt-3 self-start">
-                    <Linkedin color="#505050" />
+                    <Linkedin color="#555557" />
                   </div>
-                  <div className="text-base sm:text-lg text-primary-gray py-3">
+                  <div className="text-base sm:text-lg text-offwhite py-4">
                     {profileData?.attributes.linkedIn.replace(
                       /^https?:\/\//,
                       ""
@@ -461,9 +460,9 @@ END:VCARD`;
               )}
               <div className="inline-flex">
                 <div className="pl-2 pr-4 pt-4 self-start">
-                  <MapPin color="#505050" />
+                  <MapPin color="#555557" />
                 </div>
-                <div className="text-base sm:text-lg text-primary-gray py-3">
+                <div className="text-base sm:text-lg text-offwhite py-4">
                   <ReactMarkdown>
                     {profileData?.attributes.location}
                   </ReactMarkdown>

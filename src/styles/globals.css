@@ -21,12 +21,23 @@ body {
 }
 
 .popup-content {
-  background: white;
-  padding: 30px;
-  border-radius: 24px;
+  background: #1e1e20;
+  padding: 40px;
+  /* padding-bottom: 20px; */
+  border-radius: 16px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
-  margin-top: 60px;
+  margin-top: 60px; /* Comment if removing header */
+}
+
+.popup-content-qr {
+  background: #1e1e20;
+  padding: 40px;
+  padding-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin-top: 60px; /* Comment if removing header */
 }
 
 textarea:focus,
@@ -62,17 +73,13 @@ input:focus {
 button.ex1:hover,
 button.ex1:active,
 button.ex1:focus {
-  background-color: #f3f4f6;
+  background-color: #1e1e20;
 }
 
 button.ex2:hover,
 button.ex2:active,
 button.ex2:focus {
-  background-color: #007fb3;
-}
-
-.border-color-sky {
-  border-color: #0198d5;
+  background-color: #171718;
 }
 
 .alert-popup {
