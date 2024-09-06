@@ -1,23 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import bg_login from "assets/bg_login.png";
 
 export const Login: React.FC = () => {
+  // ================= STATE
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
+  // ================= EVENTS
+  const handleValidation = (e: React.FormEvent) => {
+    e.preventDefault();
+    let tempErrors = { email: "", password: "" };
+    let isValid = true;
+
+    if (!email) {
+      tempErrors.email = "Please enter your email.";
+      isValid = false;
+    }
+
+    if (!password) {
+      tempErrors.password = "Please enter your password.";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    if (handleValidation(e)) {
+      // proceed with form submission
+      console.log("Form is valid");
+    }
+  };
+
+  // ================= VIEWS
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-gray-800 to-gray-900">
-      <div className="w-full max-w-md p-8 space-y-6 bg-black bg-opacity-60 rounded-lg shadow-lg">
+    <div
+      className="flex min-h-screen items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${bg_login.src})`,
+      }}
+    >
+      <div className="w-full max-w-md p-8 space-y-6 rounded-2xl">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-gray-700"></div>{" "}
+          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-secondary"></div>{" "}
           {/* Placeholder for logo */}
-          <h2 className="mt-4 text-2xl font-bold text-gray-100">
+          <h2 className="mt-4 text-2xl font-medium text-offwhite">
             Hello, welcome back!
           </h2>
-          <p className="mt-2 text-gray-400">
+          <p className="mt-2 text-offgray">
             First time here?{" "}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="#" className="text-offwhite hover:underline">
               Sign up for free
             </a>
           </p>
         </div>
-        <form className="space-y-4">
+        <form className="space-y-4" noValidate onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="sr-only">
               Email
@@ -26,10 +65,20 @@ export const Login: React.FC = () => {
               id="email"
               name="email"
               type="email"
-              required
-              className="w-full px-4 py-2 text-gray-200 placeholder-gray-400 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-stroke"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errors.email) setErrors({ ...errors, email: "" }); // Clear error when typing
+              }}
+              className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
+                errors.email
+                  ? "ring-2 ring-red-500"
+                  : "focus:ring-2 focus:ring-stroke"
+              }`}
               placeholder="Your email"
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
@@ -39,30 +88,41 @@ export const Login: React.FC = () => {
               id="password"
               name="password"
               type="password"
-              required
-              className="w-full px-4 py-2 text-gray-200 placeholder-gray-400 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-stroke"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errors.password) setErrors({ ...errors, password: "" }); // Clear error when typing
+              }}
+              className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
+                errors.password
+                  ? "ring-2 ring-red-500"
+                  : "focus:ring-2 focus:ring-stroke"
+              }`}
               placeholder="Password"
             />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
           </div>
           <div>
             <button
               type="submit"
-              className="w-full px-4 py-2 font-medium text-black bg-white rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+              className="w-full px-4 py-3 font-medium text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
             >
               Sign in
             </button>
           </div>
         </form>
-        <div className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-offgray">
           <p>
             You acknowledge that you read, and agree to, our{" "}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="#" className="text-offwhite hover:underline">
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#" className="text-blue-500 hover:underline">
+            <a href="#" className="text-offwhite hover:underline">
               Privacy Policy
             </a>
+            .
           </p>
         </div>
       </div>

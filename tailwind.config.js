@@ -22,7 +22,7 @@ module.exports = {
         primary: "#18181A",
         secondary: "#1E1E20",
         offgray: "#737379",
-        // offwhite: "#DFDFDF",
+        white: "#DFDFDF",
         offwhite: "#CBCBCB",
         stroke: "#555557",
         primarybutton: "#262628",
