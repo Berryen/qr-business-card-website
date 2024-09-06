@@ -118,7 +118,7 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
             <div className="relative">
               <input
                 type="text"
-                className="w-full text-xs sm:text-sm text-offwhite bg-primary border border-stroke py-4 pl-4 pr-12 rounded-xl truncate"
+                className="w-full text-xs sm:text-sm text-offwhite bg-primary ring-1 ring-stroke py-4 pl-4 pr-12 rounded-xl truncate"
                 value={currentUrl}
                 readOnly
               />

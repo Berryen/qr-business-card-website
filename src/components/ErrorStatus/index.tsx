@@ -25,7 +25,7 @@ export const ErrorStatus: React.FC = () => {
   // ================== VIEWS
   return (
     <div className="min-h-screen sm:bg-primary sm:pb-12 sm:pt-36 justify-center">
-      <div className="relative min-h-full min-width max-w-screen md:max-w-2xl mx-5 md:m-auto sm:p-10 bg-secondary border border-stroke sm:rounded-3xl">
+      <div className="relative min-h-full min-width max-w-screen md:max-w-2xl mx-5 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-3xl">
         <div className="gap-5 flex flex-col h-96 justify-center">
           <div className="flex flex-col gap-2">
             <h1 className="text-sm  sm:text-lg text-offgray font-bold">404</h1>

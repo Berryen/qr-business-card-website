@@ -144,7 +144,7 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
             {connectionOptions.map((option) => (
               <div key={option.value} className="relative">
                 <a
-                  className={`flex flex-col w-full items-center cursor-pointer pt-5 pb-3 mb-2 mt-4 rounded-xl bg-primary border border-stroke hover:bg-secondary
+                  className={`flex flex-col w-full items-center cursor-pointer pt-5 pb-3 mb-2 mt-4 rounded-xl bg-primary ring-1 ring-stroke hover:bg-secondary
                   ${selectedOption === option.value}`}
                   onClick={() => handleOptionChange(option.value)}
                 >
@@ -165,7 +165,7 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
             <div className="relative">
               <input
                 type="text"
-                className="w-full text-xs sm:text-sm text-offwhite bg-primary border border-stroke py-4 pl-4 pr-12 rounded-xl truncate"
+                className="w-full text-xs sm:text-sm text-offwhite bg-primary ring-1 ring-stroke py-4 pl-4 pr-12 rounded-xl truncate"
                 value={currentUrl}
                 readOnly
               />
