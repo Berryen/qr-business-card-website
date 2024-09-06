@@ -6,12 +6,15 @@ export const Register: React.FC = () => {
   // ================= STATE
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [globalError, setGlobalError] = useState("");
   const router = useRouter();
 
   // ================= EVENTS
@@ -19,8 +22,19 @@ export const Register: React.FC = () => {
     e.preventDefault();
 
     // Basic validation
-    let tempErrors = { email: "", password: "", confirmPassword: "" };
+    let tempErrors = {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
     let isValid = true;
+
+    // Username validation
+    if (!username) {
+      tempErrors.email = "Please enter your username.";
+      isValid = false;
+    }
 
     // Email validation
     if (!email) {
@@ -54,6 +68,7 @@ export const Register: React.FC = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            username,
             email,
             password,
           }),
@@ -71,16 +86,55 @@ export const Register: React.FC = () => {
         // Redirect to the user's profile
         router.push(`/profile/${user.id}`);
       } else {
-        // Handle error response
-        setErrors({ ...errors, password: data.message[0].messages[0].message });
+        const errorMessage =
+          data?.error?.message ||
+          data?.message?.[0]?.messages?.[0]?.message ||
+          "An unexpected error occurred.";
+
+        if (
+          errorMessage.includes("Email") ||
+          errorMessage.includes("Username")
+        ) {
+          setErrors({
+            ...errors,
+            email: errorMessage,
+            username: errorMessage,
+          });
+        } else {
+          setErrors({
+            ...errors,
+            password: errorMessage,
+          });
+        }
+        setGlobalError(errorMessage); // Set the error globally
       }
     } catch (err) {
-      // Handle other errors, like network issues
-      setErrors({
-        ...errors,
-        password: "An unexpected error occurred. Please try again.",
-      });
+      setGlobalError("An unexpected error occurred. Please try again.");
     }
+    //     // Log error data for debugging
+    //     console.error("Error response data:", data);
+
+    //     const errorMessage =
+    //       data?.error?.message ||
+    //       data?.message?.[0]?.messages?.[0]?.message ||
+    //       "An unexpected error occurred.";
+
+    //     if (
+    //       errorMessage.includes("Email") ||
+    //       errorMessage.includes("Username")
+    //     ) {
+    //       setErrors({ ...errors, email: errorMessage, password: errorMessage });
+    //     } else {
+    //       setErrors({ ...errors, password: errorMessage });
+    //     }
+    //   }
+    // } catch (err) {
+    //   console.error("Network or unexpected error:", err);
+    //   setErrors({
+    //     ...errors,
+    //     password: "An unexpected error occurred. Please try again.",
+    //   });
+    // }
   };
 
   // ================= VIEWS
@@ -123,11 +177,34 @@ export const Register: React.FC = () => {
                   ? "ring-2 ring-red-500"
                   : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
               }`}
-              placeholder="Your email"
+              placeholder="Email"
             />
-            {errors.email && (
+            {/* {errors.email && (
               <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-            )}
+            )} */}
+          </div>
+          <div>
+            <label htmlFor="username" className="sr-only">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="username"
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (errors.username) setErrors({ ...errors, username: "" }); // Clear error when typing
+              }}
+              className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
+                errors.username
+                  ? "ring-2 ring-red-500"
+                  : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+              }`}
+              placeholder="Username"
+            />
+            {/* {errors.username && (
+              <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+            )} */}
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
@@ -148,9 +225,9 @@ export const Register: React.FC = () => {
               }`}
               placeholder="Password"
             />
-            {errors.password && (
+            {/* {errors.password && (
               <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-            )}
+            )} */}
           </div>
           <div>
             <label htmlFor="confirmPassword" className="sr-only">
@@ -159,9 +236,9 @@ export const Register: React.FC = () => {
             <input
               id="confirmPassword"
               name="confirmPassword"
-              type="confirmPassword"
+              type="password"
               onChange={(e) => {
-                setPassword(e.target.value);
+                setConfirmPassword(e.target.value);
                 if (errors.confirmPassword)
                   setErrors({ ...errors, confirmPassword: "" }); // Clear error when typing
               }}
@@ -172,11 +249,11 @@ export const Register: React.FC = () => {
               }`}
               placeholder="Confirm password"
             />
-            {errors.confirmPassword && (
+            {/* {errors.confirmPassword && (
               <p className="mt-1 text-sm text-red-500">
                 {errors.confirmPassword}
               </p>
-            )}
+            )} */}
           </div>
           <div>
             <button
@@ -187,6 +264,11 @@ export const Register: React.FC = () => {
             </button>
           </div>
         </form>
+        {globalError && (
+          <div className="mt-4 text-sm text-center text-red-500">
+            {globalError}
+          </div>
+        )}
         <div className="mx-16 mt-8 text-center text-xs text-offgray">
           <p>
             You acknowledge that you read, and agree to, our{" "}
