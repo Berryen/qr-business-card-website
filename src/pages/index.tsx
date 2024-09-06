@@ -6,7 +6,7 @@ import { Login } from "components/Login";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function LandingPage() {
+export default function LoginPage() {
   return (
     <div>
       {/* Header */}
@@ -18,7 +18,7 @@ export default function LandingPage() {
       {/* <ErrorStatus /> */}
       <Login />
       {/* Footer */}
-      <div className="bg-color-sky p-1"></div>
+      {/* <div className="bg-color-sky p-1"></div> */}
     </div>
   );
 }
