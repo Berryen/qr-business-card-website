@@ -18,6 +18,7 @@ import { ConnectPopup } from "components/ConnectPopup";
 import { QrCodePopup } from "components/QRCodePopup";
 import { Meta } from "components/Meta";
 import ytl_logo from "assets/ytl_logo.svg";
+import bg_other from "assets/bg_other.png";
 import Skeleton from "react-loading-skeleton";
 import { useYTLStrapiDataHook } from "core/context/YTLStrapiContext";
 import ReactMarkdown from "react-markdown";
@@ -259,7 +260,7 @@ END:VCARD`;
       {/* Pass profileData to Meta component for setting meta information */}
       <Meta profile={profileData} />
       {/* Header */}
-      <div className="bg-secondary ring-1-b ring-stroke p-2.5 px-5 flex items-center justify-between fixed w-full top-0 z-10">
+      <div className="bg-secondary border-b border-stroke p-2.5 px-5 flex items-center justify-between fixed w-full top-0 z-10">
         <div className="flex w-full items-center justify-between">
           <div>
             <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
@@ -310,7 +311,7 @@ END:VCARD`;
       </div>
       {isLoading ? (
         <>
-          <div className="bg-secondary ring-1 ring-stroke p-2.5 pl-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
+          <div className="bg-secondary border-b border-stroke p-2.5 pl-5 flex items-center justify-between shadow-md fixed w-full top-0 z-10">
             <div className="flex items-center">
               <Image src={ytl_logo} alt="YTL Cement" width={48} height={48} />
             </div>
@@ -327,7 +328,12 @@ END:VCARD`;
           </div>
         </>
       ) : profileData ? (
-        <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
+        <div
+          className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center"
+          style={{
+            backgroundImage: `url(${bg_other.src})`,
+          }}
+        >
           <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
             <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
               <div
