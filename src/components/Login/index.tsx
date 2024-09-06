@@ -42,21 +42,21 @@ export const Login: React.FC = () => {
         backgroundImage: `url(${bg_login.src})`,
       }}
     >
-      <div className="w-full max-w-md p-8 space-y-6 rounded-2xl">
+      <div className="w-full max-w-md p-8 space-y-8 rounded-2xl">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-secondary"></div>{" "}
+          <div className="w-16 h-16 mx-auto mb-8 shadow-sm rounded-2xl bg-secondary"></div>{" "}
           {/* Placeholder for logo */}
           <h2 className="mt-4 text-2xl font-medium text-offwhite">
             Hello, welcome back!
           </h2>
-          <p className="mt-2 text-offgray">
+          <p className="mt-2 text-xs text-offgray">
             First time here?{" "}
             <a href="#" className="text-offwhite hover:underline">
               Sign up for free
             </a>
           </p>
         </div>
-        <form className="space-y-4" noValidate onSubmit={handleSubmit}>
+        <form className="space-y-6" noValidate onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="sr-only">
               Email
@@ -72,7 +72,7 @@ export const Login: React.FC = () => {
               className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
                 errors.email
                   ? "ring-2 ring-red-500"
-                  : "focus:ring-2 focus:ring-stroke"
+                  : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
               }`}
               placeholder="Your email"
             />
@@ -95,7 +95,7 @@ export const Login: React.FC = () => {
               className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
                 errors.password
                   ? "ring-2 ring-red-500"
-                  : "focus:ring-2 focus:ring-stroke"
+                  : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
               }`}
               placeholder="Password"
             />
@@ -112,7 +112,7 @@ export const Login: React.FC = () => {
             </button>
           </div>
         </form>
-        <div className="mt-6 text-center text-sm text-offgray">
+        <div className="mx-16 mt-8 text-center text-xs text-offgray">
           <p>
             You acknowledge that you read, and agree to, our{" "}
             <a href="#" className="text-offwhite hover:underline">
