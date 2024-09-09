@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import bg_login from "assets/bg_login.png";
 import { LoginInfo } from "./props";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 // ================= INTERFACES / TYPES
 interface LoginProps {
@@ -99,9 +100,9 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
           </h2>
           <p className="mt-2 text-xs text-offgray">
             First time here?{" "}
-            <a href="#" className="text-offwhite hover:underline">
+            <Link href="/register" className="text-offwhite hover:underline">
               Sign up for free
-            </a>
+            </Link>
           </p>
         </div>
         <form className="space-y-6" noValidate onSubmit={handleSubmit}>
