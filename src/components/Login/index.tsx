@@ -12,19 +12,24 @@ interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
   // ================= STATE
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [globalError, setGlobalError] = useState("");
   const router = useRouter();
-  // console.log(JSON.stringify(loginData));
 
   // ================= EVENTS
   const handleValidation = (e: React.FormEvent) => {
     e.preventDefault();
-    let tempErrors = { email: "", password: "" };
+    let tempErrors = { username: "", email: "", password: "" };
     let isValid = true;
 
-    if (!email) {
-      tempErrors.email = "Please enter your email.";
+    if (!username) {
+      tempErrors.username = "Please enter your username.";
       isValid = false;
     }
 
@@ -56,7 +61,7 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            identifier: email, // Strapi requires 'identifier' for email or username
+            identifier: username, // Strapi requires 'identifier' for email or username
             password: password,
           }),
         }
@@ -72,14 +77,14 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
         localStorage.setItem("token", jwt);
 
         // Redirect to a protected page, e.g., the user's profile
-        router.push(`/profile/${user.id}`);
+        router.push(`/profile/${user.username}/home`);
       } else {
         // If login failed, set an error message
-        setErrors(data.message[0].messages[0].message);
+        setGlobalError(data.message[0].messages[0].message);
       }
     } catch (err) {
+      setGlobalError("An unexpected error occurred. Please try again.");
       // Handle other errors, like network issues
-      // setErrors("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -107,27 +112,27 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
         </div>
         <form className="space-y-6" noValidate onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="email" className="sr-only">
-              Email
+            <label htmlFor="username" className="sr-only">
+              Username
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
+              id="username"
+              name="username"
+              type="username"
               onChange={(e) => {
-                setEmail(e.target.value);
-                if (errors.email) setErrors({ ...errors, email: "" }); // Clear error when typing
+                setUsername(e.target.value);
+                if (errors.username) setErrors({ ...errors, username: "" }); // Clear error when typing
               }}
               className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
-                errors.email
+                errors.username
                   ? "ring-2 ring-red-500"
                   : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
               }`}
-              placeholder="Your email"
+              placeholder="Username"
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-            )}
+            {/* {errors.username && (
+              <p className="mt-1 text-sm text-red-500">{errors.username}</p>
+            )} */}
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
@@ -148,9 +153,9 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
               }`}
               placeholder="Password"
             />
-            {errors.password && (
+            {/* {errors.password && (
               <p className="mt-1 text-sm text-red-500">{errors.password}</p>
-            )}
+            )} */}
           </div>
           <div>
             <button
@@ -161,6 +166,11 @@ export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
             </button>
           </div>
         </form>
+        {globalError && (
+          <div className="mt-4 text-sm text-center text-red-500">
+            {globalError}
+          </div>
+        )}
         <div className="mx-16 mt-8 text-center text-xs text-offgray">
           <p>
             You acknowledge that you read, and agree to, our{" "}

@@ -85,7 +85,7 @@ export const Register: React.FC = () => {
         localStorage.setItem("token", jwt);
 
         // Redirect to the user's profile
-        router.push(`/profile/${user.id}`);
+        router.push(`/profile/${user.username}/home`);
       } else {
         const errorMessage =
           data?.error?.message ||
