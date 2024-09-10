@@ -1,6 +1,6 @@
 import Head from "next/head";
-import ytl_logo_icon from "assets/ytl_logo_icon.png";
-import ytl_logo from "assets/ytl_logo.jpg";
+// import ytl_logo_icon from "assets/ytl_logo_icon.png";
+// import ytl_logo from "assets/ytl_logo.jpg";
 
 // ================= INTERFACES / TYPES
 interface MetaProps {
@@ -19,14 +19,14 @@ export const Meta: React.FC<MetaProps> = ({ profile }) => {
   const companyName = profile?.attributes.company || "YTL Cement";
   const name = profile?.attributes.name || "";
   const title = `${companyName}${name ? " | " + name : ""}`;
-  const logo_icon = ytl_logo_icon.src;
-  const logo = ytl_logo.src;
+  // const logo_icon = ytl_logo_icon.src;
+  // const logo = ytl_logo.src;
 
   // ================== VIEWS
   return (
     <Head>
-      <link rel="icon" href={logo} />
-      <link rel="apple-touch-icon" href={logo} />
+      {/* <link rel="icon" href={logo} /> */}
+      {/* <link rel="apple-touch-icon" href={logo} /> */}
       <title>{title}</title>
       <meta name="robots" content="noindex, nofollow" />
     </Head>

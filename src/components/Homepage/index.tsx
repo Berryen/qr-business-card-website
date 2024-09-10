@@ -21,6 +21,12 @@ import { useYTLStrapiDataHook } from "core/context/YTLStrapiContext";
 import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/router";
 import { localeTranslation } from "helpers/locale";
+import {
+  isAuthenticated as checkAuth,
+  getAuthToken,
+  getAuthenticatedUser,
+  clearAuthToken,
+} from "helpers/authUtils";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -56,6 +62,7 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
   // ================= HOOKS
   const locale = router.locale ?? "en";
@@ -80,6 +87,11 @@ export const Homepage: React.FC<ProfileProps> = ({
 
   const handleConnectClick = () => {
     setConnectPopupVisibility(!isConnectPopupVisible);
+  };
+
+  const checkAuthentication = () => {
+    const token = getAuthToken(); // Function to retrieve the token from localStorage or cookies
+    return !!token;
   };
 
   // Function to construct and download a vCard for the displayed profile
@@ -187,10 +199,23 @@ END:VCARD`;
     `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
   );
 
-  // Simulate a function that checks if the user is authenticated
-  const checkAuthentication = () => {
-    // Assume you have an authentication check function like this
-    return !!localStorage.getItem("token");
+  // Logout
+  // const handleLogout = () => {
+  //   // Clear the token from localStorage (or wherever it's stored)
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("userData");
+
+  //   // Set authentication state to false
+  //   setIsAuthenticated(false);
+
+  //   // Redirect to the login page
+  //   router.push("/");
+  // };
+
+  const handleLogout = () => {
+    clearAuthToken(); // Clear the token from localStorage or cookies
+    setIsAuthenticated(false); // Update the state
+    router.push("/"); // Redirect to login page
   };
 
   // ================= EFFECTS
@@ -198,19 +223,25 @@ END:VCARD`;
     const fetchProfileData = async () => {
       try {
         setIsLoading(true);
-
-        // Extract the username from the router's query
         const { username } = router.query;
 
         if (!username) {
           throw new Error("Username not found in the URL");
         }
 
-        // Fetch the data based on the username
+        const authenticatedUserId = getAuthenticatedUser(); // Get `id` instead of `username`
+
+        // Fetch the profile by `username` or `id`
         const { data } = await fetchStrapiAPI(`/profiles/${username}`, {
           populate: "*",
           locale: localeTranslation(locale),
         });
+
+        // Check if the logged-in user's `id` matches the profile's `id`
+        if (data?.id !== authenticatedUserId) {
+          router.push("/unauthorized"); // Redirect if the logged-in user's `id` does not match
+          return;
+        }
 
         setProfileData(data);
       } catch (error) {
@@ -226,16 +257,18 @@ END:VCARD`;
   }, [router.query, locale]);
 
   useEffect(() => {
-    // If the user is not authenticated, redirect them
-    if (!checkAuthentication()) {
-      router.push("/login");
+    const isLoggedIn = checkAuthentication();
+
+    if (!isLoggedIn) {
+      router.push("/"); // Redirect if not authenticated
     } else {
-      setIsAuthenticated(true);
+      setIsAuthenticated(true); // Set to true if authenticated
     }
   }, [router]);
 
-  if (!isAuthenticated) {
-    return <div>Loading...</div>; // Or a spinner/loading indicator
+  // Show loading state or skeleton while checking authentication
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
   }
 
   // ================= VIEWS
@@ -243,169 +276,176 @@ END:VCARD`;
     <div>
       {/* Pass profileData to Meta component for setting meta information */}
       <Meta profile={profileData} />
-      {isLoading ? (
+      {isAuthenticated ? (
         <>
-          {/* Skeleton */}
-          <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
-            <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:shadow-lg sm:rounded-2xl">
-              <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
-              <Skeleton
-                count={4}
-                className="flex flex-col bg-primary rounded-2xl h-14"
-              />
-            </div>
-          </div>
-        </>
-      ) : profileData ? (
-        <div
-          className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center"
-          style={{
-            backgroundImage: `url(${bg_other.src})`,
-          }}
-        >
-          <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
-            <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
-              <div
-                className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
-                onClick={handleShareClick}
-              >
-                <Share2 color="#555557" />
-              </div>
-              <img
-                className="w-32 h-32 object-cover rounded-full"
-                src={profileURL}
-                alt="Contact Avatar"
-                width={150}
-                height={150}
-              />
-              <div className="w-full divide-y divide-. divide-stroke">
-                <div className="flex flex-col items-center pb-5">
-                  <h1 className="text-lg sm:text-xl text-offwhite">
-                    {profileData?.attributes.name}
-                  </h1>
-                  <p className="text-base sm:text-lg text-offwhite">
-                    {profileData?.attributes.jobTitle}
-                  </p>
-                  <p className="text-base sm:text-lg text-offwhite">
-                    {profileData?.attributes.company}
-                  </p>
+          {isLoading ? (
+            <>
+              {/* Skeleton */}
+              <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
+                <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:shadow-lg sm:rounded-2xl">
+                  <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
+                  <Skeleton
+                    count={4}
+                    className="flex flex-col bg-primary rounded-2xl h-14"
+                  />
                 </div>
-                <div className="w-full flex gap-5 pt-5">
-                  <button
-                    className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
-                    onClick={saveContact}
+              </div>
+            </>
+          ) : profileData ? (
+            <div
+              className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center"
+              style={{
+                backgroundImage: `url(${bg_other.src})`,
+              }}
+            >
+              <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
+                <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
+                  <div
+                    className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
+                    onClick={handleShareClick}
                   >
-                    Save Contact
-                  </button>
-                  <button
-                    className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
-                    onClick={handleConnectClick}
-                  >
-                    Connect
-                  </button>
+                    <Share2 color="#555557" />
+                  </div>
+                  <img
+                    className="w-32 h-32 object-cover rounded-full"
+                    src={profileURL}
+                    alt="Contact Avatar"
+                    width={150}
+                    height={150}
+                  />
+                  <div className="w-full divide-y divide-. divide-stroke">
+                    <div className="flex flex-col items-center pb-5">
+                      <h1 className="text-lg sm:text-xl text-offwhite">
+                        {profileData?.attributes.name}
+                      </h1>
+                      <p className="text-base sm:text-lg text-offwhite">
+                        {profileData?.attributes.jobTitle}
+                      </p>
+                      <p className="text-base sm:text-lg text-offwhite">
+                        {profileData?.attributes.company}
+                      </p>
+                    </div>
+                    <div className="w-full flex gap-5 pt-5">
+                      <button
+                        className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
+                        onClick={saveContact}
+                      >
+                        Save Contact
+                      </button>
+                      <button
+                        className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
+                        onClick={handleConnectClick}
+                      >
+                        Connect
+                      </button>
 
-                  {isConnectPopupVisible && (
-                    <ConnectPopup
-                      onClose={handleConnectClick}
-                      profile={profileData}
-                    />
-                  )}
+                      {isConnectPopupVisible && (
+                        <ConnectPopup
+                          onClose={handleConnectClick}
+                          profile={profileData}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            {/* Popup */}
-            {isSharePopupVisible && (
-              <QrCodePopup
-                onClose={handleShareClick}
-                profileName={profileData?.attributes?.name}
-              />
-            )}
-            {profileData?.attributes.about && (
-              <>
-                <div className="flex flex-col mx-3 mb-7">
-                  <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
-                    {getTranslation("About")}
-                  </h2>
-                  <p className="text-base sm:text-lg text-offwhite">
-                    {profileData?.attributes.about}
-                  </p>
-                </div>
-              </>
-            )}
-            <div className="flex flex-col mx-3 divide-y divide-stroke">
-              <div className="inline-flex">
-                <div className="pl-2 pr-4 self-center">
-                  <Mail color="#555557" />
-                </div>
-                <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                  {profileData?.attributes.emailId}
-                  {profileData?.attributes.domain}
-                </div>
-              </div>
-              {profileData?.attributes.mobileNumber &&
-                profileData?.attributes.countryCodeMobile && (
+                {/* Popup */}
+                {isSharePopupVisible && (
+                  <QrCodePopup
+                    onClose={handleShareClick}
+                    profileName={profileData?.attributes?.name}
+                  />
+                )}
+                {profileData?.attributes.about && (
+                  <>
+                    <div className="flex flex-col mx-3 mb-7">
+                      <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
+                        {getTranslation("About")}
+                      </h2>
+                      <p className="text-base sm:text-lg text-offwhite">
+                        {profileData?.attributes.about}
+                      </p>
+                    </div>
+                  </>
+                )}
+                <div className="flex flex-col mx-3 divide-y divide-stroke">
                   <div className="inline-flex">
                     <div className="pl-2 pr-4 self-center">
-                      <Smartphone color="#555557" />
+                      <Mail color="#555557" />
                     </div>
                     <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                      {profileData?.attributes.mobileNumber
-                        ? `(${getCountryCode(
-                            profileData?.attributes.countryCodeMobile
-                          )}) ${formatMalaysianPhoneNumber(
-                            profileData?.attributes.mobileNumber
-                          )}`
-                        : ""}
+                      {profileData?.attributes.emailId}
+                      {profileData?.attributes.domain}
                     </div>
                   </div>
-                )}
-              {profileData?.attributes.officeNumber &&
-                profileData?.attributes.countryCodeOffice && (
-                  <div className="inline-flex">
-                    <div className="pl-2 pr-4 self-center">
-                      <Phone color="#555557" />
-                    </div>
-                    <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                      {profileData?.attributes.officeNumber
-                        ? `(${getCountryCode(
-                            profileData?.attributes.countryCodeOffice
-                          )}) ${formatMalaysianPhoneNumber(
-                            profileData?.attributes.officeNumber
-                          )}${
-                            profileData?.attributes.extensionNumber
-                              ? ` ext ${profileData?.attributes.extensionNumber}`
-                              : ""
-                          }`
-                        : ""}
-                    </div>
-                  </div>
-                )}
-              {profileData?.attributes.linkedIn && (
-                <div className="inline-flex">
-                  <div className="pl-2 pr-4 pt-3 self-start">
-                    <Linkedin color="#555557" />
-                  </div>
-                  <div className="text-base sm:text-lg text-offwhite py-4">
-                    {profileData?.attributes.linkedIn.replace(
-                      /^https?:\/\//,
-                      ""
+                  {profileData?.attributes.mobileNumber &&
+                    profileData?.attributes.countryCodeMobile && (
+                      <div className="inline-flex">
+                        <div className="pl-2 pr-4 self-center">
+                          <Smartphone color="#555557" />
+                        </div>
+                        <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                          {profileData?.attributes.mobileNumber
+                            ? `(${getCountryCode(
+                                profileData?.attributes.countryCodeMobile
+                              )}) ${formatMalaysianPhoneNumber(
+                                profileData?.attributes.mobileNumber
+                              )}`
+                            : ""}
+                        </div>
+                      </div>
                     )}
+                  {profileData?.attributes.officeNumber &&
+                    profileData?.attributes.countryCodeOffice && (
+                      <div className="inline-flex">
+                        <div className="pl-2 pr-4 self-center">
+                          <Phone color="#555557" />
+                        </div>
+                        <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                          {profileData?.attributes.officeNumber
+                            ? `(${getCountryCode(
+                                profileData?.attributes.countryCodeOffice
+                              )}) ${formatMalaysianPhoneNumber(
+                                profileData?.attributes.officeNumber
+                              )}${
+                                profileData?.attributes.extensionNumber
+                                  ? ` ext ${profileData?.attributes.extensionNumber}`
+                                  : ""
+                              }`
+                            : ""}
+                        </div>
+                      </div>
+                    )}
+                  {profileData?.attributes.linkedIn && (
+                    <div className="inline-flex">
+                      <div className="pl-2 pr-4 pt-3 self-start">
+                        <Linkedin color="#555557" />
+                      </div>
+                      <div className="text-base sm:text-lg text-offwhite py-4">
+                        {profileData?.attributes.linkedIn.replace(
+                          /^https?:\/\//,
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  <div className="inline-flex">
+                    <div className="pl-2 pr-4 pt-4 self-start">
+                      <MapPin color="#555557" />
+                    </div>
+                    <div className="text-base sm:text-lg text-offwhite py-4">
+                      <ReactMarkdown>
+                        {profileData?.attributes.location}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
-              )}
-              <div className="inline-flex">
-                <div className="pl-2 pr-4 pt-4 self-start">
-                  <MapPin color="#555557" />
-                </div>
-                <div className="text-base sm:text-lg text-offwhite py-4">
-                  <ReactMarkdown>
-                    {profileData?.attributes.location}
-                  </ReactMarkdown>
-                </div>
               </div>
+              <button onClick={handleLogout}>Logout</button>
             </div>
-          </div>
-        </div>
+          ) : (
+            <ErrorStatus />
+          )}
+        </>
       ) : (
         <ErrorStatus />
       )}
