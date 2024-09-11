@@ -105,10 +105,10 @@ export const Profile: React.FC<ProfileProps> = ({
     "items-center",
     "justify-center",
     "px-4",
-    "py-2",
+    "py-3",
     "text-base",
     "sm:text-lg",
-    "rounded-lg"
+    "rounded-2xl"
   );
 
   // ================= EVENTS
@@ -341,12 +341,12 @@ END:VCARD`;
             transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
           >
             <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
-              <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
+              <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-7 mb-7">
                 <div
                   className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
                   onClick={handleShareClick}
                 >
-                  <Share2 color="#555557" />
+                  <Share2 className="w-6 h-6" color="#555557" />
                 </div>
                 <img
                   className="w-32 h-32 object-cover rounded-full"
@@ -355,9 +355,9 @@ END:VCARD`;
                   width={150}
                   height={150}
                 />
-                <div className="w-full divide-y divide-. divide-stroke">
-                  <div className="flex flex-col items-center pb-5">
-                    <h1 className="text-lg sm:text-xl text-offwhite">
+                <div className="w-full">
+                  <div className="flex flex-col items-center gap-2 pb-1">
+                    <h1 className="text-lg sm:text-2xl font-medium text-offwhite">
                       {profileData?.attributes.name}
                     </h1>
                     <p className="text-base sm:text-lg text-offwhite">
@@ -412,7 +412,7 @@ END:VCARD`;
               <div className="flex flex-col mx-3 divide-y divide-stroke">
                 <div className="inline-flex">
                   <div className="pl-2 pr-4 self-center">
-                    <Mail color="#555557" />
+                    <Mail className="w-6 h-6" color="#555557" />
                   </div>
                   <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                     {profileData?.attributes.emailId}
@@ -423,7 +423,7 @@ END:VCARD`;
                   profileData?.attributes.countryCodeMobile && (
                     <div className="inline-flex">
                       <div className="pl-2 pr-4 self-center">
-                        <Smartphone color="#555557" />
+                        <Smartphone className="w-6 h-6" color="#555557" />
                       </div>
                       <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                         {profileData?.attributes.mobileNumber
@@ -440,7 +440,7 @@ END:VCARD`;
                   profileData?.attributes.countryCodeOffice && (
                     <div className="inline-flex">
                       <div className="pl-2 pr-4 self-center">
-                        <Phone color="#555557" />
+                        <Phone className="w-6 h-6" color="#555557" />
                       </div>
                       <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                         {profileData?.attributes.officeNumber
@@ -460,7 +460,7 @@ END:VCARD`;
                 {profileData?.attributes.linkedIn && (
                   <div className="inline-flex">
                     <div className="pl-2 pr-4 pt-3 self-start">
-                      <Linkedin color="#555557" />
+                      <Linkedin className="w-6 h-6" color="#555557" />
                     </div>
                     <div className="text-base sm:text-lg text-offwhite py-4">
                       {profileData?.attributes.linkedIn.replace(
@@ -472,7 +472,7 @@ END:VCARD`;
                 )}
                 <div className="inline-flex">
                   <div className="pl-2 pr-4 pt-4 self-start">
-                    <MapPin color="#555557" />
+                    <MapPin className="w-6 h-6" color="#555557" />
                   </div>
                   <div className="text-base sm:text-lg text-offwhite py-4">
                     <ReactMarkdown>
