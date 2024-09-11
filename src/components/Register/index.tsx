@@ -142,7 +142,7 @@ export const Register: React.FC = () => {
   // ================= VIEWS
   return (
     <div
-      className="flex min-h-screen items-center justify-center bg-cover bg-center"
+      className="flex min-h-screen items-center justify-center bg-primary bg-cover bg-center"
       style={{
         backgroundImage: `url(${bg_login.src})`,
       }}

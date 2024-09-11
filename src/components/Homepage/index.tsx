@@ -27,6 +27,7 @@ import {
   getAuthenticatedUser,
   clearAuthToken,
 } from "helpers/authUtils";
+import { motion } from "framer-motion";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -281,7 +282,7 @@ END:VCARD`;
           {isLoading ? (
             <>
               {/* Skeleton */}
-              <div className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center">
+              <div className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center">
                 <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:shadow-lg sm:rounded-2xl">
                   <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
                   <Skeleton
@@ -293,164 +294,172 @@ END:VCARD`;
             </>
           ) : profileData ? (
             <div
-              className="min-h-screen sm:bg-primary pb-10 pt-21 sm:pb-12 sm:pt-28 justify-center"
+              className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center"
               style={{
                 backgroundImage: `url(${bg_other.src})`,
               }}
             >
-              <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
-                <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
-                  <div
-                    className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
-                    onClick={handleShareClick}
-                  >
-                    <Share2 color="#555557" />
-                  </div>
-                  <img
-                    className="w-32 h-32 object-cover rounded-full"
-                    src={profileURL}
-                    alt="Contact Avatar"
-                    width={150}
-                    height={150}
-                  />
-                  <div className="w-full divide-y divide-. divide-stroke">
-                    <div className="flex flex-col items-center pb-5">
-                      <h1 className="text-lg sm:text-xl text-offwhite">
-                        {profileData?.attributes.name}
-                      </h1>
-                      <p className="text-base sm:text-lg text-offwhite">
-                        {profileData?.attributes.jobTitle}
-                      </p>
-                      <p className="text-base sm:text-lg text-offwhite">
-                        {profileData?.attributes.company}
-                      </p>
+              <motion.div
+                initial={{ opacity: 0 }} // Starting state: invisible
+                animate={{ opacity: 1 }} // Ending state: fully visible
+                transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
+              >
+                <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
+                  <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
+                    <div
+                      className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
+                      onClick={handleShareClick}
+                    >
+                      <Share2 color="#555557" />
                     </div>
-                    <div className="w-full flex gap-5 pt-5">
-                      <button
-                        className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
-                        onClick={saveContact}
-                      >
-                        Save Contact
-                      </button>
-                      <button
-                        className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
-                        onClick={handleConnectClick}
-                      >
-                        Connect
-                      </button>
+                    <img
+                      className="w-32 h-32 object-cover rounded-full"
+                      src={profileURL}
+                      alt="Contact Avatar"
+                      width={150}
+                      height={150}
+                    />
+                    <div className="w-full divide-y divide-. divide-stroke">
+                      <div className="flex flex-col items-center pb-5">
+                        <h1 className="text-lg sm:text-xl text-offwhite">
+                          {profileData?.attributes.name}
+                        </h1>
+                        <p className="text-base sm:text-lg text-offwhite">
+                          {profileData?.attributes.jobTitle}
+                        </p>
+                        <p className="text-base sm:text-lg text-offwhite">
+                          {profileData?.attributes.company}
+                        </p>
+                      </div>
+                      <div className="w-full flex gap-5 pt-5">
+                        <button
+                          className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
+                          onClick={saveContact}
+                        >
+                          Save Contact
+                        </button>
+                        <button
+                          className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
+                          onClick={handleConnectClick}
+                        >
+                          Connect
+                        </button>
 
-                      {isConnectPopupVisible && (
-                        <ConnectPopup
-                          onClose={handleConnectClick}
-                          profile={profileData}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {/* Popup */}
-                {isSharePopupVisible && (
-                  <QrCodePopup
-                    onClose={handleShareClick}
-                    profileName={profileData?.attributes?.name}
-                  />
-                )}
-                {profileData?.attributes.about && (
-                  <>
-                    <div className="flex flex-col mx-3 mb-7">
-                      <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
-                        {getTranslation("About")}
-                      </h2>
-                      <p className="text-base sm:text-lg text-offwhite">
-                        {profileData?.attributes.about}
-                      </p>
-                    </div>
-                  </>
-                )}
-                <div className="flex flex-col mx-3 divide-y divide-stroke">
-                  <div className="inline-flex">
-                    <div className="pl-2 pr-4 self-center">
-                      <Mail color="#555557" />
-                    </div>
-                    <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                      {profileData?.attributes.emailId}
-                      {profileData?.attributes.domain}
-                    </div>
-                  </div>
-                  {profileData?.attributes.mobileNumber &&
-                    profileData?.attributes.countryCodeMobile && (
-                      <div className="inline-flex">
-                        <div className="pl-2 pr-4 self-center">
-                          <Smartphone color="#555557" />
-                        </div>
-                        <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                          {profileData?.attributes.mobileNumber
-                            ? `(${getCountryCode(
-                                profileData?.attributes.countryCodeMobile
-                              )}) ${formatMalaysianPhoneNumber(
-                                profileData?.attributes.mobileNumber
-                              )}`
-                            : ""}
-                        </div>
-                      </div>
-                    )}
-                  {profileData?.attributes.officeNumber &&
-                    profileData?.attributes.countryCodeOffice && (
-                      <div className="inline-flex">
-                        <div className="pl-2 pr-4 self-center">
-                          <Phone color="#555557" />
-                        </div>
-                        <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                          {profileData?.attributes.officeNumber
-                            ? `(${getCountryCode(
-                                profileData?.attributes.countryCodeOffice
-                              )}) ${formatMalaysianPhoneNumber(
-                                profileData?.attributes.officeNumber
-                              )}${
-                                profileData?.attributes.extensionNumber
-                                  ? ` ext ${profileData?.attributes.extensionNumber}`
-                                  : ""
-                              }`
-                            : ""}
-                        </div>
-                      </div>
-                    )}
-                  {profileData?.attributes.linkedIn && (
-                    <div className="inline-flex">
-                      <div className="pl-2 pr-4 pt-3 self-start">
-                        <Linkedin color="#555557" />
-                      </div>
-                      <div className="text-base sm:text-lg text-offwhite py-4">
-                        {profileData?.attributes.linkedIn.replace(
-                          /^https?:\/\//,
-                          ""
+                        {isConnectPopupVisible && (
+                          <ConnectPopup
+                            onClose={handleConnectClick}
+                            profile={profileData}
+                          />
                         )}
                       </div>
                     </div>
+                  </div>
+                  {/* Popup */}
+                  {isSharePopupVisible && (
+                    <QrCodePopup
+                      onClose={handleShareClick}
+                      profileName={profileData?.attributes?.name}
+                    />
                   )}
-                  <div className="inline-flex">
-                    <div className="pl-2 pr-4 pt-4 self-start">
-                      <MapPin color="#555557" />
+                  {profileData?.attributes.about && (
+                    <>
+                      <div className="flex flex-col mx-3 mb-7">
+                        <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
+                          {getTranslation("About")}
+                        </h2>
+                        <p className="text-base sm:text-lg text-offwhite">
+                          {profileData?.attributes.about}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  <div className="flex flex-col mx-3 divide-y divide-stroke">
+                    <div className="inline-flex">
+                      <div className="pl-2 pr-4 self-center">
+                        <Mail color="#555557" />
+                      </div>
+                      <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                        {profileData?.attributes.emailId}
+                        {profileData?.attributes.domain}
+                      </div>
                     </div>
-                    <div className="text-base sm:text-lg text-offwhite py-4">
-                      <ReactMarkdown>
-                        {profileData?.attributes.location}
-                      </ReactMarkdown>
+                    {profileData?.attributes.mobileNumber &&
+                      profileData?.attributes.countryCodeMobile && (
+                        <div className="inline-flex">
+                          <div className="pl-2 pr-4 self-center">
+                            <Smartphone color="#555557" />
+                          </div>
+                          <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                            {profileData?.attributes.mobileNumber
+                              ? `(${getCountryCode(
+                                  profileData?.attributes.countryCodeMobile
+                                )}) ${formatMalaysianPhoneNumber(
+                                  profileData?.attributes.mobileNumber
+                                )}`
+                              : ""}
+                          </div>
+                        </div>
+                      )}
+                    {profileData?.attributes.officeNumber &&
+                      profileData?.attributes.countryCodeOffice && (
+                        <div className="inline-flex">
+                          <div className="pl-2 pr-4 self-center">
+                            <Phone color="#555557" />
+                          </div>
+                          <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                            {profileData?.attributes.officeNumber
+                              ? `(${getCountryCode(
+                                  profileData?.attributes.countryCodeOffice
+                                )}) ${formatMalaysianPhoneNumber(
+                                  profileData?.attributes.officeNumber
+                                )}${
+                                  profileData?.attributes.extensionNumber
+                                    ? ` ext ${profileData?.attributes.extensionNumber}`
+                                    : ""
+                                }`
+                              : ""}
+                          </div>
+                        </div>
+                      )}
+                    {profileData?.attributes.linkedIn && (
+                      <div className="inline-flex">
+                        <div className="pl-2 pr-4 pt-3 self-start">
+                          <Linkedin color="#555557" />
+                        </div>
+                        <div className="text-base sm:text-lg text-offwhite py-4">
+                          {profileData?.attributes.linkedIn.replace(
+                            /^https?:\/\//,
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <div className="inline-flex">
+                      <div className="pl-2 pr-4 pt-4 self-start">
+                        <MapPin color="#555557" />
+                      </div>
+                      <div className="text-base sm:text-lg text-offwhite py-4">
+                        <ReactMarkdown>
+                          {profileData?.attributes.location}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
               <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (
             <ErrorStatus />
+            // <></>
           )}
         </>
       ) : (
+        // <></>
         <ErrorStatus />
       )}
       {/* Footer */}
-      <div className="bg-color-sky p-1"></div>
+      <div className="bg-stroke p-1"></div>
     </div>
   );
 };

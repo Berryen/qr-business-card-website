@@ -5,12 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// ================= INTERFACES / TYPES
-interface LoginProps {
-  loginData: LoginInfo;
-}
-
-export const Login: React.FC<LoginProps> = ({ loginData: loginDataProp }) => {
+export const Login: React.FC = () => {
   // ================= STATE
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
