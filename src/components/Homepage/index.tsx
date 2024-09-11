@@ -7,6 +7,11 @@ import {
   Smartphone,
   Phone,
   MapPin,
+  Edit,
+  Bookmark,
+  Settings,
+  ChevronDown,
+  LogOut,
 } from "react-feather";
 import { ProfileInfo } from "./props";
 import { fetchStrapiAPI } from "helpers/api";
@@ -62,7 +67,9 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
 
   // ================= HOOKS
@@ -261,14 +268,16 @@ END:VCARD`;
     const isLoggedIn = checkAuthentication();
 
     if (!isLoggedIn) {
+      setIsAuthenticated(false);
       router.push("/"); // Redirect if not authenticated
     } else {
       setIsAuthenticated(true); // Set to true if authenticated
     }
+    setIsAuthLoading(false); // Mark the authentication check as done
   }, [router]);
 
   // Show loading state or skeleton while checking authentication
-  if (isAuthenticated === null) {
+  if (isAuthLoading) {
     return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
   }
 
@@ -304,13 +313,66 @@ END:VCARD`;
                 animate={{ opacity: 1 }} // Ending state: fully visible
                 transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
               >
+                <div className="absolute flex flex-col min-w-72 w-fit gap-4">
+                  <div className="p-6 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-14 h-14 bg-primarybutton rounded-xl"></div>
+                        <div>
+                          <p className="text-offwhite front-medium text-lg">
+                            Options
+                          </p>
+                          <p className="text-offgray text-medium pt-1">
+                            {profileData?.attributes.name}’s Profile
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <ChevronDown className="w-6 h-6 ml-8" color="#555557" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                        <span className="text-offwhite text-lg">
+                          Edit Personal Card
+                        </span>
+                        <Edit className="w-6 h-6" color="#555557" />
+                      </div>
+
+                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                        <span className="text-offwhite text-lg">
+                          Saved Cards
+                        </span>
+                        <Bookmark className="w-6 h-6" color="#555557" />
+                      </div>
+
+                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                        <span className="text-offwhite text-lg">
+                          Account Settings
+                        </span>
+                        <Settings className="w-6 h-6" color="#555557" />
+                      </div>
+
+                      <div
+                        className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
+                        onClick={handleLogout}
+                      >
+                        <span className="text-offwhite text-lg">Logout</span>
+                        <LogOut className="w-6 h-6" color="#555557" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
                   <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-5 mb-7">
                     <div
                       className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
                       onClick={handleShareClick}
                     >
-                      <Share2 color="#555557" />
+                      <Share2 className="w-6 h-6" color="#555557" />
                     </div>
                     <img
                       className="w-32 h-32 object-cover rounded-full"
@@ -376,7 +438,7 @@ END:VCARD`;
                   <div className="flex flex-col mx-3 divide-y divide-stroke">
                     <div className="inline-flex">
                       <div className="pl-2 pr-4 self-center">
-                        <Mail color="#555557" />
+                        <Mail className="w-6 h-6" color="#555557" />
                       </div>
                       <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                         {profileData?.attributes.emailId}
@@ -387,7 +449,7 @@ END:VCARD`;
                       profileData?.attributes.countryCodeMobile && (
                         <div className="inline-flex">
                           <div className="pl-2 pr-4 self-center">
-                            <Smartphone color="#555557" />
+                            <Smartphone className="w-6 h-6" color="#555557" />
                           </div>
                           <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                             {profileData?.attributes.mobileNumber
@@ -404,7 +466,7 @@ END:VCARD`;
                       profileData?.attributes.countryCodeOffice && (
                         <div className="inline-flex">
                           <div className="pl-2 pr-4 self-center">
-                            <Phone color="#555557" />
+                            <Phone className="w-6 h-6" color="#555557" />
                           </div>
                           <div className="text-base sm:text-lg text-offwhite py-4 truncate">
                             {profileData?.attributes.officeNumber
@@ -424,7 +486,7 @@ END:VCARD`;
                     {profileData?.attributes.linkedIn && (
                       <div className="inline-flex">
                         <div className="pl-2 pr-4 pt-3 self-start">
-                          <Linkedin color="#555557" />
+                          <Linkedin className="w-6 h-6" color="#555557" />
                         </div>
                         <div className="text-base sm:text-lg text-offwhite py-4">
                           {profileData?.attributes.linkedIn.replace(
@@ -436,7 +498,7 @@ END:VCARD`;
                     )}
                     <div className="inline-flex">
                       <div className="pl-2 pr-4 pt-4 self-start">
-                        <MapPin color="#555557" />
+                        <MapPin className="w-6 h-6" color="#555557" />
                       </div>
                       <div className="text-base sm:text-lg text-offwhite py-4">
                         <ReactMarkdown>
@@ -447,7 +509,6 @@ END:VCARD`;
                   </div>
                 </div>
               </motion.div>
-              <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (
             <ErrorStatus />
