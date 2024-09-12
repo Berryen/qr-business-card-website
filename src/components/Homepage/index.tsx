@@ -66,6 +66,7 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -95,6 +96,10 @@ export const Homepage: React.FC<ProfileProps> = ({
 
   const handleConnectClick = () => {
     setConnectPopupVisibility(!isConnectPopupVisible);
+  };
+
+  const toggleOptionsVisibility = () => {
+    setIsOptionsVisible(!isOptionsVisible);
   };
 
   const checkAuthentication = () => {
@@ -314,7 +319,10 @@ END:VCARD`;
                 transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
               >
                 <div className="absolute flex flex-col min-w-72 w-fit gap-4">
-                  <div className="p-6 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
+                  <div
+                    className="p-6 bg-secondary rounded-2xl ring-1 ring-stroke ml-10 cursor-pointer"
+                    onClick={toggleOptionsVisibility}
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <div className="w-14 h-14 bg-primarybutton rounded-xl"></div>
@@ -328,44 +336,50 @@ END:VCARD`;
                         </div>
                       </div>
                       <div>
-                        <ChevronDown className="w-6 h-6 ml-8" color="#555557" />
+                        <ChevronDown
+                          className={`w-6 h-6 ml-8 transition-transform duration-200 ${
+                            isOptionsVisible ? "rotate-180" : ""
+                          }`} // Rotate the icon when visible
+                          color="#555557"
+                        />
                       </div>
                     </div>
                   </div>
-                  <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                        <span className="text-offwhite text-lg">
-                          Edit Personal Card
-                        </span>
-                        <Edit className="w-6 h-6" color="#555557" />
-                      </div>
+                  {isOptionsVisible && (
+                    <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                          <span className="text-offwhite text-lg">
+                            Edit Personal Card
+                          </span>
+                          <Edit className="w-6 h-6" color="#555557" />
+                        </div>
 
-                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                        <span className="text-offwhite text-lg">
-                          Saved Cards
-                        </span>
-                        <Bookmark className="w-6 h-6" color="#555557" />
-                      </div>
+                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                          <span className="text-offwhite text-lg">
+                            Saved Cards
+                          </span>
+                          <Bookmark className="w-6 h-6" color="#555557" />
+                        </div>
 
-                      <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                        <span className="text-offwhite text-lg">
-                          Account Settings
-                        </span>
-                        <Settings className="w-6 h-6" color="#555557" />
-                      </div>
+                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                          <span className="text-offwhite text-lg">
+                            Account Settings
+                          </span>
+                          <Settings className="w-6 h-6" color="#555557" />
+                        </div>
 
-                      <div
-                        className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
-                        onClick={handleLogout}
-                      >
-                        <span className="text-offwhite text-lg">Logout</span>
-                        <LogOut className="w-6 h-6" color="#555557" />
+                        <div
+                          className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
+                          onClick={handleLogout}
+                        >
+                          <span className="text-offwhite text-lg">Logout</span>
+                          <LogOut className="w-6 h-6" color="#555557" />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
-
                 <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
                   <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-7 mb-7">
                     <div
