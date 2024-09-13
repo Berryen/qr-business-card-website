@@ -327,7 +327,7 @@ END:VCARD`;
                       <div className="flex items-center space-x-3">
                         <div className="w-14 h-14 bg-primarybutton rounded-xl"></div>
                         <div>
-                          <p className="text-offwhite front-medium text-lg">
+                          <p className="text-offwhite font-medium text-lg">
                             Options
                           </p>
                           <p className="text-offgray text-medium pt-1">
