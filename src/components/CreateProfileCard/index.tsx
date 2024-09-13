@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import bg_other from "assets/bg_other.png";
 import clsx from "clsx";
 import { ChevronDown } from "react-feather";
+import Head from "next/head";
 
 export const CreateProfileCard: React.FC = () => {
   // ================= STATE
@@ -35,6 +36,9 @@ export const CreateProfileCard: React.FC = () => {
         backgroundImage: `url(${bg_other.src})`,
       }}
     >
+      <Head>
+        <title>Create Profile Card</title>
+      </Head>
       {isCreateButtonVisible && (
         <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
           <div className="w-full flex gap-5">

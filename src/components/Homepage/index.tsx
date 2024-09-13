@@ -67,7 +67,7 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
-  const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
+  const [profileData, setProfileData] = useState<any>(null);
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -244,21 +244,27 @@ END:VCARD`;
 
         const authenticatedUserId = getAuthenticatedUser(); // Get `id` instead of `username`
 
-        // Fetch the profile by `username` or `id`
-        const { data } = await fetchStrapiAPI(`/profiles/${username}`, {
+        // Attempt to fetch the profile by `username` or `id`
+        const { data, error } = await fetchStrapiAPI(`/profiles/${username}`, {
           populate: "*",
           locale: localeTranslation(locale),
         });
 
-        // Check if the logged-in user's `id` matches the profile's `id`
-        if (data?.id !== authenticatedUserId) {
-          router.push("/unauthorized"); // Redirect if the logged-in user's `id` does not match
-          return;
-        }
+        if (error || !data) {
+          // If profile data is not found, redirect to the create profile page
+          router.push(`/profile/${username}/create`);
+        } else {
+          // Check if the logged-in user's `id` matches the profile's `id`
+          if (data?.user_id !== authenticatedUserId) {
+            router.push("/unauthorized"); // Redirect if the logged-in user's `id` does not match
+            return;
+          }
 
-        setProfileData(data);
+          setProfileData(data);
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
+        router.push(`/profile/${router.query.username}/create`); // Redirect if there's an error
       } finally {
         setIsLoading(false);
       }
@@ -267,7 +273,7 @@ END:VCARD`;
     if (router.isReady) {
       fetchProfileData();
     }
-  }, [router.query, locale]);
+  }, [router.query, router.isReady]);
 
   useEffect(() => {
     const isLoggedIn = checkAuthentication();
@@ -278,13 +284,65 @@ END:VCARD`;
     } else {
       setIsAuthenticated(true); // Set to true if authenticated
     }
-    setIsAuthLoading(false); // Mark the authentication check as done
   }, [router]);
 
-  // Show loading state or skeleton while checking authentication
-  if (isAuthLoading) {
-    return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
+  if (isLoading) {
+    return <div>Loading...</div>; // Replace with spinner or skeleton loader if preferred
   }
+
+  // useEffect(() => {
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const { username } = router.query;
+
+  //       if (!username) {
+  //         throw new Error("Username not found in the URL");
+  //       }
+
+  //       const authenticatedUserId = getAuthenticatedUser(); // Get `id` instead of `username`
+
+  //       // Fetch the profile by `username` or `id`
+  //       const { data } = await fetchStrapiAPI(`/profiles/${username}`, {
+  //         populate: "*",
+  //         locale: localeTranslation(locale),
+  //       });
+
+  //       // Check if the logged-in user's `id` matches the profile's `id`
+  //       if (data?.id !== authenticatedUserId) {
+  //         router.push("/unauthorized"); // Redirect if the logged-in user's `id` does not match
+  //         return;
+  //       }
+
+  //       setProfileData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching profile data:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   if (router.isReady) {
+  //     fetchProfileData();
+  //   }
+  // }, [router.query, locale]);
+
+  // useEffect(() => {
+  //   const isLoggedIn = checkAuthentication();
+
+  //   if (!isLoggedIn) {
+  //     setIsAuthenticated(false);
+  //     router.push("/"); // Redirect if not authenticated
+  //   } else {
+  //     setIsAuthenticated(true); // Set to true if authenticated
+  //   }
+  //   setIsAuthLoading(false); // Mark the authentication check as done
+  // }, [router]);
+
+  // // Show loading state or skeleton while checking authentication
+  // if (isAuthLoading) {
+  //   return <div>Loading...</div>; // You can replace this with a spinner or skeleton loader
+  // }
 
   // ================= VIEWS
   return (

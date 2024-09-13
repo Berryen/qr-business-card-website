@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 
 export const Login: React.FC = () => {
   // ================= STATE
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({
@@ -19,32 +18,6 @@ export const Login: React.FC = () => {
   const router = useRouter();
 
   // ================= EVENTS
-  const handleValidation = (e: React.FormEvent) => {
-    e.preventDefault();
-    let tempErrors = { username: "", email: "", password: "" };
-    let isValid = true;
-
-    if (!username) {
-      tempErrors.username = "Please enter your username.";
-      isValid = false;
-    }
-
-    if (!password) {
-      tempErrors.password = "Please enter your password.";
-      isValid = false;
-    }
-
-    setErrors(tempErrors);
-    return isValid;
-  };
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   if (handleValidation(e)) {
-  //     // proceed with form submission
-  //     console.log("Form is valid");
-  //   }
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -72,15 +45,31 @@ export const Login: React.FC = () => {
         // Save JWT in localStorage (or you could use cookies)
         localStorage.setItem("token", jwt);
 
-        // Redirect to a protected page, e.g., the user's profile
-        router.push(`/profile/${user.username}/home`);
+        // Fetch user's profile to check if it exists
+        const profileRes = await fetch(
+          `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}/api/profiles?filters[username][$eq]=${user.username}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          }
+        );
+        const profileData = await profileRes.json();
+        console.log(JSON.stringify(profileData));
+
+        if (profileData.length === 0) {
+          // No profile found, redirect to profile creation
+          router.push(`/profile/${user.username}/create`);
+        } else {
+          // Profile exists, redirect to profile home
+          router.push(`/profile/${user.username}/home`);
+        }
       } else {
-        // If login failed, set an error message
         setGlobalError(data.message[0].messages[0].message);
       }
     } catch (err) {
       setGlobalError("An unexpected error occurred. Please try again.");
-      // Handle other errors, like network issues
     }
   };
 
