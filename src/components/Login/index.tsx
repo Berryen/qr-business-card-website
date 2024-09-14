@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}/api/auth/local`,
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/local`,
         {
           method: "POST",
           headers: {
@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
 
         // Fetch user's profile to check if it exists
         const profileRes = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}/api/profiles?filters[username][$eq]=${user.username}`,
+          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles?filters[username][$eq]=${user.username}`,
           {
             method: "GET",
             headers: {

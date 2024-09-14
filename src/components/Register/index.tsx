@@ -63,7 +63,7 @@ export const Register: React.FC = () => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}/api/auth/local/register`,
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/local/register`,
         {
           method: "POST",
           headers: {

@@ -50,10 +50,10 @@ let nextConfig = {
   },
   serverRuntimeConfig: {
     // Will only be available on the server side
-    apiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_ARI_URL, // Pass through env variables
+    apiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_API_URL, // Pass through env variables
   },
   publicRuntimeConfig: {
-    apiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_ARI_URL,
+    apiBaseUrl: process.env.NEXT_PUBLIC_STRAPI_API_URL,
     facebookAppId: process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID,
     gtagId: process.env.NEXT_PUBLIC_GTAG_ID,
     instagramApiKey: process.env.NEXT_PUBLIC_INSTAGRAM_API_KEY,
