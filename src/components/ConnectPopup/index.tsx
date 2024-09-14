@@ -12,8 +12,7 @@ interface ConnectPopupProps {
 interface ProfileInfo {
   id: number;
   attributes: {
-    emailId: string;
-    domain: string;
+    email: string;
     countryCodeMobile: string;
     countryCodeOffice: string;
     mobileNumber: string;
@@ -52,7 +51,7 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
       window.open(whatsappLink, "_blank");
     } else if (option === "email") {
       // Generate mailto link
-      const emailLink = `mailto:${profile.attributes.emailId}${profile.attributes.domain}?subject=I%20would%20like%20to%20connect%20with%20you!`;
+      const emailLink = `mailto:${profile.attributes.email}?subject=I%20would%20like%20to%20connect%20with%20you!`;
       // Redirect to mailto link
       window.location.href = emailLink;
     } else if (option === "phone") {

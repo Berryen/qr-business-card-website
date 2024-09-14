@@ -4,8 +4,7 @@ export type ProfileInfo = {
     name: string;
     about: string;
     slug: string;
-    emailId: string;
-    domain: string;
+    email: string;
     jobTitle: string;
     company: string;
     countryCodeMobile: string;

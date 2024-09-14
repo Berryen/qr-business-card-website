@@ -152,7 +152,7 @@ TEL;TYPE=WORK,VOICE:${
             )}`
           : ""
       }
-EMAIL:${profileData?.attributes.emailId}${profileData?.attributes.domain}
+EMAIL:${profileData?.attributes.email}
 ADR;TYPE=WORK:${formattedLocation};;;;
 END:VCARD`;
 
@@ -220,9 +220,9 @@ END:VCARD`;
     return formattedNumber.trim(); // Remove trailing space
   };
 
-  const profileURL = `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`;
+  const profileURL = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`;
   console.log(
-    `${process.env.NEXT_PUBLIC_STRAPI_ARI_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
+    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
   );
 
   // ================= EFFECTS
@@ -415,8 +415,7 @@ END:VCARD`;
                     <Mail className="w-6 h-6" color="#555557" />
                   </div>
                   <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                    {profileData?.attributes.emailId}
-                    {profileData?.attributes.domain}
+                    {profileData?.attributes.email}
                   </div>
                 </div>
                 {profileData?.attributes.mobileNumber &&
