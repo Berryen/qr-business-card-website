@@ -7,6 +7,12 @@ import { useRouter } from "next/router";
 import { fetchStrapiAPI } from "helpers/api";
 import logo_fyp from "assets/logo_fyp.png";
 import { ProfileInfo } from "./props";
+import {
+  isAuthenticated as checkAuth,
+  getAuthToken,
+  getAuthenticatedUser,
+  clearAuthToken,
+} from "helpers/authUtils";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -44,6 +50,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
   const [extensionNumber, setExtensionNumber] = useState("");
   const [profileData, setProfileData] = useState<any>(null);
   const [globalError, setGlobalError] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   const router = useRouter();
   const logo = logo_fyp.src;
@@ -53,17 +60,21 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
     setCreateButtonVisible(false);
     setCreateCardVisible(true);
   };
-
+  const handleLogout = () => {
+    clearAuthToken(); // Clear the token from localStorage or cookies
+    setIsAuthenticated(false); // Update the state
+    router.push("/"); // Redirect to login page
+  };
   // Handle form submission
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const authenticatedUserId = getAuthenticatedUser();
 
     try {
       // Prepare data to send to Strapi
       const profileData = {
         data: {
-          profilePhoto:
-            "http://localhost:1337/uploads/16a1153c16cf4245d65f9a65bc3fa287_753ae15fd8.jpg",
+          profilePhoto: 1,
           name: displayName,
           slug: username.toLowerCase().replace(/\s+/g, "-"), // Create slug from username
           email,
@@ -75,10 +86,9 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
           countryCodeOffice,
           officeNumber,
           extensionNumber,
-          users_permissions_user: username,
+          users: authenticatedUserId,
         },
       };
-      console.log("pf1" + JSON.stringify(profileData));
 
       // Send the data to Strapi API using fetch
       const res = await fetch(
@@ -133,7 +143,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
         setUsername(username); // Set the username in the input field
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        router.push(`/profile/${router.query.username}/create`); // Redirect to create page if needed
+        // router.push(`/profile/${router.query.username}/create`); // Redirect to create page if needed
       }
     };
 
@@ -348,12 +358,20 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                 </div>
                 <div className="flex flex-row space-x-10 justify-between">
                   <div className="flex flex-col w-1/2"></div>
-                  <div className="flex flex-col mt-24 w-36">
+                  <div className="flex flex-col mt-10 w-36">
                     <button
                       type="submit"
                       className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
                     >
                       Submit
+                    </button>
+                  </div>
+                  <div className="flex flex-col mt-10 w-36">
+                    <button
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
+                      onClick={handleLogout}
+                    >
+                      Logout
                     </button>
                   </div>
                 </div>
