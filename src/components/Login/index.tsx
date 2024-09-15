@@ -47,7 +47,7 @@ export const Login: React.FC = () => {
 
         // Fetch user's profile to check if it exists
         const profileRes = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles?filters[username][$eq]=${user.username}`,
+          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles?filters[slug][$eq]=${user.username}`,
           {
             method: "GET",
             headers: {
@@ -56,7 +56,8 @@ export const Login: React.FC = () => {
           }
         );
         const profileData = await profileRes.json();
-        console.log(JSON.stringify(profileData));
+        console.log("logintsx profile data: " + JSON.stringify(profileData));
+        console.log("logintsx username: " + JSON.stringify(user.username));
 
         if (profileData.length === 0) {
           // No profile found, redirect to profile creation

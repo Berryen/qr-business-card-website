@@ -29,7 +29,6 @@ import { localeTranslation } from "helpers/locale";
 import {
   isAuthenticated as checkAuth,
   getAuthToken,
-  getAuthenticatedUser,
   clearAuthToken,
 } from "helpers/authUtils";
 import { motion } from "framer-motion";
@@ -68,7 +67,6 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const [profileData, setProfileData] = useState<any>(null);
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
@@ -102,10 +100,10 @@ export const Homepage: React.FC<ProfileProps> = ({
     setIsOptionsVisible(!isOptionsVisible);
   };
 
-  const checkAuthentication = () => {
-    const token = getAuthToken(); // Function to retrieve the token from localStorage or cookies
-    return !!token;
-  };
+  // const checkAuthentication = () => {
+  //   const token = getAuthToken(); // Function to retrieve the token from localStorage or cookies
+  //   return !!token;
+  // };
 
   // Function to construct and download a vCard for the displayed profile
   const saveContact = () => {
@@ -212,19 +210,6 @@ END:VCARD`;
     `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
   );
 
-  // Logout
-  // const handleLogout = () => {
-  //   // Clear the token from localStorage (or wherever it's stored)
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("userData");
-
-  //   // Set authentication state to false
-  //   setIsAuthenticated(false);
-
-  //   // Redirect to the login page
-  //   router.push("/");
-  // };
-
   const handleLogout = () => {
     clearAuthToken(); // Clear the token from localStorage or cookies
     setIsAuthenticated(false); // Update the state
@@ -236,59 +221,58 @@ END:VCARD`;
     const fetchProfileData = async () => {
       try {
         setIsLoading(true);
-        const { username } = router.query;
 
+        const { username } = router.query;
+        console.log(
+          "Homepagetsx fetched username from router.query:",
+          router.query
+        );
+
+        // Ensure `username` is present
         if (!username) {
           throw new Error("Username not found in the URL");
         }
 
-        const authenticatedUserId = getAuthenticatedUser(); // Get `id` instead of `username`
-
-        // Attempt to fetch the profile by `username` or `id`
+        // Attempt to fetch the profile by `username`
         const { data, error } = await fetchStrapiAPI(`/profiles/${username}`, {
           populate: "*",
           locale: localeTranslation(locale),
         });
+        console.log("Homepagetsx fetched profile data:", JSON.stringify(data));
 
-        if (error || !data) {
-          // If profile data is not found, redirect to the create profile page
+        // Check if there's an error or no data
+        if (error || !data || data.length === 0) {
           router.push(`/profile/${username}/create`);
         } else {
-          // Check if the logged-in user's `id` matches the profile's `id`
-          if (data?.user_id !== authenticatedUserId) {
-            router.push("/unauthorized"); // Redirect if the logged-in user's `id` does not match
-            return;
-          }
-
           setProfileData(data);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        router.push(`/profile/${router.query.username}/create`); // Redirect if there's an error
+        router.push(`/profile/${router.query.username}/create`);
       } finally {
         setIsLoading(false);
       }
     };
 
+    // Ensure that the router is ready before fetching data
     if (router.isReady) {
       fetchProfileData();
     }
   }, [router.query, router.isReady]);
 
-  useEffect(() => {
-    const isLoggedIn = checkAuthentication();
+  console.log("Homepagetsx profileData: " + JSON.stringify(profileData));
 
-    if (!isLoggedIn) {
-      setIsAuthenticated(false);
-      router.push("/"); // Redirect if not authenticated
-    } else {
-      setIsAuthenticated(true); // Set to true if authenticated
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   const isLoggedIn = checkAuthentication();
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Replace with spinner or skeleton loader if preferred
-  }
+  //   if (!isLoggedIn) {
+  //     setIsAuthenticated(false);
+  //     router.push("/"); // Redirect if not authenticated
+  //   } else {
+  //     setIsAuthenticated(true); // Set to true if authenticated
+  //   }
+  //   setIsAuthLoading(false); // Mark the authentication check as done
+  // }, [router]);
 
   // useEffect(() => {
   //   const fetchProfileData = async () => {
@@ -349,244 +333,242 @@ END:VCARD`;
     <div>
       {/* Pass profileData to Meta component for setting meta information */}
       <Meta profile={profileData} />
-      {isAuthenticated ? (
+      {/* {isAuthenticated ? (
+        <> */}
+      {isLoading ? (
         <>
-          {isLoading ? (
-            <>
-              {/* Skeleton */}
-              <div className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center">
-                <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:shadow-lg sm:rounded-2xl">
-                  <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
-                  <Skeleton
-                    count={4}
-                    className="flex flex-col bg-primary rounded-2xl h-14"
-                  />
+          {/* Skeleton */}
+          <div className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center">
+            <div className="relative min-height min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:shadow-lg sm:rounded-2xl">
+              <Skeleton className="flex flex-col bg-primary rounded-2xl h-80" />
+              <Skeleton
+                count={4}
+                className="flex flex-col bg-primary rounded-2xl h-14"
+              />
+            </div>
+          </div>
+        </>
+      ) : profileData ? (
+        <div
+          className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${bg_other.src})`,
+          }}
+        >
+          <motion.div
+            initial={{ opacity: 0 }} // Starting state: invisible
+            animate={{ opacity: 1 }} // Ending state: fully visible
+            transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
+          >
+            <div className="absolute flex flex-col min-w-72 w-fit gap-4">
+              <div
+                className="p-6 bg-secondary rounded-2xl ring-1 ring-stroke ml-10 cursor-pointer"
+                onClick={toggleOptionsVisibility}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-14 h-14 bg-primarybutton rounded-xl"></div>
+                    <div>
+                      <p className="text-offwhite font-medium text-lg">
+                        Options
+                      </p>
+                      <p className="text-offgray text-medium pt-1">
+                        {profileData?.attributes.name}’s Profile
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <ChevronDown
+                      className={`w-6 h-6 ml-8 transition-transform duration-200 ${
+                        isOptionsVisible ? "rotate-180" : ""
+                      }`} // Rotate the icon when visible
+                      color="#555557"
+                    />
+                  </div>
                 </div>
               </div>
-            </>
-          ) : profileData ? (
-            <div
-              className="min-h-screen justify-center pb-10 pt-21 sm:pb-12 sm:pt-28 bg-primary bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${bg_other.src})`,
-              }}
-            >
-              <motion.div
-                initial={{ opacity: 0 }} // Starting state: invisible
-                animate={{ opacity: 1 }} // Ending state: fully visible
-                transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
-              >
-                <div className="absolute flex flex-col min-w-72 w-fit gap-4">
-                  <div
-                    className="p-6 bg-secondary rounded-2xl ring-1 ring-stroke ml-10 cursor-pointer"
-                    onClick={toggleOptionsVisibility}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-14 h-14 bg-primarybutton rounded-xl"></div>
-                        <div>
-                          <p className="text-offwhite font-medium text-lg">
-                            Options
-                          </p>
-                          <p className="text-offgray text-medium pt-1">
-                            {profileData?.attributes.name}’s Profile
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        <ChevronDown
-                          className={`w-6 h-6 ml-8 transition-transform duration-200 ${
-                            isOptionsVisible ? "rotate-180" : ""
-                          }`} // Rotate the icon when visible
-                          color="#555557"
-                        />
-                      </div>
+              {isOptionsVisible && (
+                <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                      <span className="text-offwhite text-lg">
+                        Edit Personal Card
+                      </span>
+                      <Edit className="w-6 h-6" color="#555557" />
                     </div>
-                  </div>
-                  {isOptionsVisible && (
-                    <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                          <span className="text-offwhite text-lg">
-                            Edit Personal Card
-                          </span>
-                          <Edit className="w-6 h-6" color="#555557" />
-                        </div>
 
-                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                          <span className="text-offwhite text-lg">
-                            Saved Cards
-                          </span>
-                          <Bookmark className="w-6 h-6" color="#555557" />
-                        </div>
-
-                        <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
-                          <span className="text-offwhite text-lg">
-                            Account Settings
-                          </span>
-                          <Settings className="w-6 h-6" color="#555557" />
-                        </div>
-
-                        <div
-                          className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
-                          onClick={handleLogout}
-                        >
-                          <span className="text-offwhite text-lg">Logout</span>
-                          <LogOut className="w-6 h-6" color="#555557" />
-                        </div>
-                      </div>
+                    <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                      <span className="text-offwhite text-lg">Saved Cards</span>
+                      <Bookmark className="w-6 h-6" color="#555557" />
                     </div>
-                  )}
-                </div>
-                <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
-                  <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-7 mb-7">
+
+                    <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                      <span className="text-offwhite text-lg">
+                        Account Settings
+                      </span>
+                      <Settings className="w-6 h-6" color="#555557" />
+                    </div>
+
                     <div
-                      className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
-                      onClick={handleShareClick}
+                      className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
+                      onClick={handleLogout}
                     >
-                      <Share2 className="w-6 h-6" color="#555557" />
-                    </div>
-                    <img
-                      className="w-32 h-32 object-cover rounded-full"
-                      src={profileURL}
-                      alt="Contact Avatar"
-                      width={150}
-                      height={150}
-                    />
-                    <div className="w-full">
-                      <div className="flex flex-col items-center gap-2 pb-1">
-                        <h1 className="text-lg sm:text-2xl font-medium text-offwhite">
-                          {profileData?.attributes.name}
-                        </h1>
-                        <p className="text-base sm:text-lg text-offwhite">
-                          {profileData?.attributes.jobTitle}
-                        </p>
-                        <p className="text-base sm:text-lg text-offwhite">
-                          {profileData?.attributes.company}
-                        </p>
-                      </div>
-                      <div className="w-full flex gap-5 pt-5">
-                        <button
-                          className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
-                          onClick={saveContact}
-                        >
-                          Save Contact
-                        </button>
-                        <button
-                          className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
-                          onClick={handleConnectClick}
-                        >
-                          Connect
-                        </button>
-
-                        {isConnectPopupVisible && (
-                          <ConnectPopup
-                            onClose={handleConnectClick}
-                            profile={profileData}
-                          />
-                        )}
-                      </div>
+                      <span className="text-offwhite text-lg">Logout</span>
+                      <LogOut className="w-6 h-6" color="#555557" />
                     </div>
                   </div>
-                  {/* Popup */}
-                  {isSharePopupVisible && (
-                    <QrCodePopup
-                      onClose={handleShareClick}
-                      profileName={profileData?.attributes?.name}
-                    />
-                  )}
-                  {profileData?.attributes.about && (
-                    <>
-                      <div className="flex flex-col mx-3 mb-7">
-                        <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
-                          {getTranslation("About")}
-                        </h2>
-                        <p className="text-base sm:text-lg text-offwhite">
-                          {profileData?.attributes.about}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                  <div className="flex flex-col mx-3 divide-y divide-stroke">
+                </div>
+              )}
+            </div>
+            <div className="relative min-h-full min-width max-w-screen md:max-w-xl mx-4 sm:mx-10 md:m-auto sm:p-10 bg-secondary ring-1 ring-stroke sm:rounded-2xl">
+              <div className="flex flex-col bg-primary items-center rounded-2xl gap-5 p-7 mb-7">
+                <div
+                  className="absolute top-6 right-5 sm:top-16 sm:right-16 cursor-pointer"
+                  onClick={handleShareClick}
+                >
+                  <Share2 className="w-6 h-6" color="#555557" />
+                </div>
+                <img
+                  className="w-32 h-32 object-cover rounded-full"
+                  src={profileURL}
+                  alt="Contact Avatar"
+                  width={150}
+                  height={150}
+                />
+                <div className="w-full">
+                  <div className="flex flex-col items-center gap-2 pb-1">
+                    <h1 className="text-lg sm:text-2xl font-medium text-offwhite">
+                      {profileData?.attributes.name}
+                    </h1>
+                    <p className="text-base sm:text-lg text-offwhite">
+                      {profileData?.attributes.jobTitle}
+                    </p>
+                    <p className="text-base sm:text-lg text-offwhite">
+                      {profileData?.attributes.company}
+                    </p>
+                  </div>
+                  <div className="w-full flex gap-5 pt-5">
+                    <button
+                      className={`bg-primarybutton ring-1 ring-stroke text-offwhite ex1 ${buttonClass}`}
+                      onClick={saveContact}
+                    >
+                      Save Contact
+                    </button>
+                    <button
+                      className={`bg-secondary ring-1 ring-stroke text-offwhite ex2  ${buttonClass}`}
+                      onClick={handleConnectClick}
+                    >
+                      Connect
+                    </button>
+
+                    {isConnectPopupVisible && (
+                      <ConnectPopup
+                        onClose={handleConnectClick}
+                        profile={profileData}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* Popup */}
+              {isSharePopupVisible && (
+                <QrCodePopup
+                  onClose={handleShareClick}
+                  profileName={profileData?.attributes?.name}
+                />
+              )}
+              {profileData?.attributes.about && (
+                <>
+                  <div className="flex flex-col mx-3 mb-7">
+                    <h2 className="text-xl sm:text-2xl mb-2 text-offwhite">
+                      {getTranslation("About")}
+                    </h2>
+                    <p className="text-base sm:text-lg text-offwhite">
+                      {profileData?.attributes.about}
+                    </p>
+                  </div>
+                </>
+              )}
+              <div className="flex flex-col mx-3 divide-y divide-stroke">
+                <div className="inline-flex">
+                  <div className="pl-2 pr-4 self-center">
+                    <Mail className="w-6 h-6" color="#555557" />
+                  </div>
+                  <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                    {profileData?.attributes.email}
+                  </div>
+                </div>
+                {profileData?.attributes.mobileNumber &&
+                  profileData?.attributes.countryCodeMobile && (
                     <div className="inline-flex">
                       <div className="pl-2 pr-4 self-center">
-                        <Mail className="w-6 h-6" color="#555557" />
+                        <Smartphone className="w-6 h-6" color="#555557" />
                       </div>
                       <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                        {profileData?.attributes.email}
+                        {profileData?.attributes.mobileNumber
+                          ? `(${getCountryCode(
+                              profileData?.attributes.countryCodeMobile
+                            )}) ${formatMalaysianPhoneNumber(
+                              profileData?.attributes.mobileNumber
+                            )}`
+                          : ""}
                       </div>
                     </div>
-                    {profileData?.attributes.mobileNumber &&
-                      profileData?.attributes.countryCodeMobile && (
-                        <div className="inline-flex">
-                          <div className="pl-2 pr-4 self-center">
-                            <Smartphone className="w-6 h-6" color="#555557" />
-                          </div>
-                          <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                            {profileData?.attributes.mobileNumber
-                              ? `(${getCountryCode(
-                                  profileData?.attributes.countryCodeMobile
-                                )}) ${formatMalaysianPhoneNumber(
-                                  profileData?.attributes.mobileNumber
-                                )}`
-                              : ""}
-                          </div>
-                        </div>
-                      )}
-                    {profileData?.attributes.officeNumber &&
-                      profileData?.attributes.countryCodeOffice && (
-                        <div className="inline-flex">
-                          <div className="pl-2 pr-4 self-center">
-                            <Phone className="w-6 h-6" color="#555557" />
-                          </div>
-                          <div className="text-base sm:text-lg text-offwhite py-4 truncate">
-                            {profileData?.attributes.officeNumber
-                              ? `(${getCountryCode(
-                                  profileData?.attributes.countryCodeOffice
-                                )}) ${formatMalaysianPhoneNumber(
-                                  profileData?.attributes.officeNumber
-                                )}${
-                                  profileData?.attributes.extensionNumber
-                                    ? ` ext ${profileData?.attributes.extensionNumber}`
-                                    : ""
-                                }`
-                              : ""}
-                          </div>
-                        </div>
-                      )}
-                    {profileData?.attributes.linkedIn && (
-                      <div className="inline-flex">
-                        <div className="pl-2 pr-4 pt-3 self-start">
-                          <Linkedin className="w-6 h-6" color="#555557" />
-                        </div>
-                        <div className="text-base sm:text-lg text-offwhite py-4">
-                          {profileData?.attributes.linkedIn.replace(
-                            /^https?:\/\//,
-                            ""
-                          )}
-                        </div>
-                      </div>
-                    )}
+                  )}
+                {profileData?.attributes.officeNumber &&
+                  profileData?.attributes.countryCodeOffice && (
                     <div className="inline-flex">
-                      <div className="pl-2 pr-4 pt-4 self-start">
-                        <MapPin className="w-6 h-6" color="#555557" />
+                      <div className="pl-2 pr-4 self-center">
+                        <Phone className="w-6 h-6" color="#555557" />
                       </div>
-                      <div className="text-base sm:text-lg text-offwhite py-4">
-                        <ReactMarkdown>
-                          {profileData?.attributes.location}
-                        </ReactMarkdown>
+                      <div className="text-base sm:text-lg text-offwhite py-4 truncate">
+                        {profileData?.attributes.officeNumber
+                          ? `(${getCountryCode(
+                              profileData?.attributes.countryCodeOffice
+                            )}) ${formatMalaysianPhoneNumber(
+                              profileData?.attributes.officeNumber
+                            )}${
+                              profileData?.attributes.extensionNumber
+                                ? ` ext ${profileData?.attributes.extensionNumber}`
+                                : ""
+                            }`
+                          : ""}
                       </div>
+                    </div>
+                  )}
+                {profileData?.attributes.linkedIn && (
+                  <div className="inline-flex">
+                    <div className="pl-2 pr-4 pt-3 self-start">
+                      <Linkedin className="w-6 h-6" color="#555557" />
+                    </div>
+                    <div className="text-base sm:text-lg text-offwhite py-4">
+                      {profileData?.attributes.linkedIn.replace(
+                        /^https?:\/\//,
+                        ""
+                      )}
                     </div>
                   </div>
+                )}
+                <div className="inline-flex">
+                  <div className="pl-2 pr-4 pt-4 self-start">
+                    <MapPin className="w-6 h-6" color="#555557" />
+                  </div>
+                  <div className="text-base sm:text-lg text-offwhite py-4">
+                    <ReactMarkdown>
+                      {profileData?.attributes.location}
+                    </ReactMarkdown>
+                  </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
-          ) : (
-            <ErrorStatus />
-            // <></>
-          )}
-        </>
+          </motion.div>
+        </div>
       ) : (
+        //   ) : (
+        //     <ErrorStatus />
+        //     // <></>
+        //   )}
+        // </>
         // <></>
         <ErrorStatus />
       )}
