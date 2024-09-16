@@ -32,6 +32,7 @@ import {
   clearAuthToken,
 } from "helpers/authUtils";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -70,6 +71,7 @@ export const Homepage: React.FC<ProfileProps> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | undefined>();
 
   // ================= HOOKS
   const locale = router.locale ?? "en";
@@ -233,6 +235,9 @@ END:VCARD`;
           throw new Error("Username not found in the URL");
         }
 
+        // Store the username in the state
+        setUsername(username as string);
+
         // Attempt to fetch the profile by `username`
         const { data, error } = await fetchStrapiAPI(`/profiles/${username}`, {
           populate: "*",
@@ -390,12 +395,15 @@ END:VCARD`;
               {isOptionsVisible && (
                 <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                    <Link
+                      href={`/profile/${username}/edit`}
+                      className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
+                    >
                       <span className="text-offwhite text-lg">
                         Edit Personal Card
                       </span>
                       <Edit className="w-6 h-6" color="#555557" />
-                    </div>
+                    </Link>
 
                     <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
                       <span className="text-offwhite text-lg">Saved Cards</span>
