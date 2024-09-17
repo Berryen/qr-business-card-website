@@ -1,18 +1,15 @@
+import "helpers/polyfill";
 import React, { useState, useEffect } from "react";
 import bg_other from "assets/bg_other.png";
 import clsx from "clsx";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronDown } from "react-feather";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { fetchStrapiAPI } from "helpers/api";
 import logo_fyp from "assets/logo_fyp.png";
 import { ProfileInfo } from "./props";
-import {
-  isAuthenticated as checkAuth,
-  getAuthToken,
-  getAuthenticatedUser,
-  clearAuthToken,
-} from "helpers/authUtils";
+import { isAuthenticated as clearAuthToken } from "helpers/authUtils";
 import { motion } from "framer-motion";
 
 // ================= INTERFACES / TYPES
@@ -21,36 +18,27 @@ interface ProfileProps {
 }
 
 export const EditProfileCard: React.FC<ProfileProps> = () => {
-  // ================= VARIABLES
-  const buttonClass = clsx(
-    "w-full",
-    "inline-flex",
-    "items-center",
-    "justify-center",
-    "px-4",
-    "py-2",
-    "text-base",
-    "sm:text-lg",
-    "rounded-lg"
-  );
+  const router = useRouter();
 
   // ================= STATE
-  const [username, setUsername] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [company, setCompany] = useState("");
-  const [location, setLocation] = useState("");
-  const [countryCodeMobile, setCountryCodeMobile] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [countryCodeOffice, setCountryCodeOffice] = useState("");
-  const [officeNumber, setOfficeNumber] = useState("");
-  const [extensionNumber, setExtensionNumber] = useState("");
-  const [profileData, setProfileData] = useState<any>(null);
-  const [globalError, setGlobalError] = useState("");
+  const [profileData, setProfileData] = useState<ProfileInfo | null>();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  // Controlled form states for user input
+  const [displayName, setDisplayName] = useState<string>("");
+  const [slug, setSlug] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [company, setCompany] = useState<string>("");
+  const [jobTitle, setJobTitle] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [countryCodeMobile, setCountryCodeMobile] = useState<string>("");
+  const [mobileNumber, setMobileNumber] = useState<string>("");
+  const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
+  const [officeNumber, setOfficeNumber] = useState<string>("");
+  const [extensionNumber, setExtensionNumber] = useState<string>("");
 
-  const router = useRouter();
+  // ================= HOOKS
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const logo = logo_fyp.src;
 
   // ================= EVENTS
@@ -62,125 +50,109 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const authenticatedUserId = getAuthenticatedUser();
 
     try {
-      // Prepare data to send to Strapi
-      const updatedProfileData = {
-        data: {
-          profilePhoto: 1, // Assuming the photo ID is still the same
-          name: displayName,
-          slug: username.toLowerCase().replace(/\s+/g, "-"), // Slug is derived from username
-          email,
-          jobTitle,
-          company,
-          location,
-          countryCodeMobile,
-          mobileNumber,
-          countryCodeOffice,
-          officeNumber,
-          extensionNumber,
-          users: authenticatedUserId, // Keep the same authenticated user
-        },
+      // Fetch the profile by slug to get the profile ID
+      const fetchProfileResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles?filters[slug][$eq]=${profileData?.attributes.slug}`
+      );
+      const fetchProfileData = await fetchProfileResponse.json();
+
+      // Assuming the profile exists, extract the profile ID
+      const profileId = fetchProfileData.data[0]?.id;
+
+      if (!profileId) {
+        throw new Error("Profile not found");
+      }
+
+      // Now that you have the profile ID, update the profile
+      const updatedProfile = {
+        name: displayName,
+        slug,
+        email,
+        company,
+        jobTitle,
+        location,
+        countryCodeMobile,
+        mobileNumber,
+        countryCodeOffice,
+        officeNumber,
+        extensionNumber,
       };
 
-      // Send a PUT or PATCH request to update the profile
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${username}`, // Ensure correct profile is being updated
+      const updateResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${profileId}`,
         {
-          method: "PUT", // or 'PATCH' if you want partial updates
+          method: "PUT",
+          body: JSON.stringify({ data: updatedProfile }),
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedProfileData),
         }
       );
 
-      console.log(
-        "Updated profile data: " + JSON.stringify(updatedProfileData)
-      );
-
-      // Parse the response
-      const data = await res.json();
-
-      if (res.ok) {
-        // Success: Profile updated
-        alert("Profile updated successfully!");
-
-        // Optionally redirect user to their profile page
-        // router.push(`/profile/${username}/home`);
-      } else {
-        // Handle errors
-        console.error("Failed to update profile:", data);
-        setGlobalError(
-          "Profile update failed. Please check your inputs and try again."
-        );
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update profile");
       }
-    } catch (err) {
-      console.error("Error submitting profile form:", err);
-      setGlobalError("An unexpected error occurred. Please try again.");
+      console.log(JSON.stringify({ data: updatedProfile }));
+
+      // Redirect or display success message
+      alert("Profile updated successfully!");
+      router.push(`/profile/${profileData?.attributes.slug}/edit`);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
     }
   };
 
   // ================= EFFECTS
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${username}`
-        );
-        const data = await res.json();
-
-        if (res.ok) {
-          // Set form fields with existing profile data
-          setDisplayName(data.name);
-          setEmail(data.email);
-          setJobTitle(data.jobTitle);
-          setCompany(data.company);
-          setLocation(data.location);
-          setCountryCodeMobile(data.countryCodeMobile);
-          setMobileNumber(data.mobileNumber);
-          setCountryCodeOffice(data.countryCodeOffice);
-          setOfficeNumber(data.officeNumber);
-          setExtensionNumber(data.extensionNumber);
-        } else {
-          console.error("Error fetching profile data:", data);
-        }
-      } catch (err) {
-        console.error("Error fetching profile data:", err);
-      }
-    };
-
-    if (username) {
-      fetchProfile();
-    }
-  }, [username]);
-
-  useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const usernameQuery = router.query.username;
-
-        // Check if `usernameQuery` is an array or a string
-        if (!usernameQuery) {
-          throw new Error("Logged in user's username not found");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (!pathname) {
+          throw new Error("Pathname is null or undefined.");
         }
 
-        const username = Array.isArray(usernameQuery)
-          ? usernameQuery[0]
-          : usernameQuery;
+        // Use pathname or searchParams to extract slug
+        const pathSegments = pathname?.split("/") || [];
+        const slugFromPathname =
+          pathSegments.length > 1
+            ? pathSegments[pathSegments.length - 2]
+            : null;
+        const slugFromSearchParams = searchParams?.get("slug");
 
-        setUsername(username); // Set the username in the input field
+        const slug = slugFromPathname || slugFromSearchParams;
+
+        if (!slug) {
+          throw new Error("Slug not found in pathname or searchParams");
+        }
+
+        const { data } = await fetchStrapiAPI(`/profiles/${slug}`, {
+          populate: "*",
+        });
+
+        setProfileData(data);
+
+        // Prefill form inputs with fetched data
+        setDisplayName(data.attributes.name || "");
+        setSlug(data.attributes.slug || "");
+        setEmail(data.attributes.email || "");
+        setCompany(data.attributes.company || "");
+        setJobTitle(data.attributes.jobTitle || "");
+        setLocation(data.attributes.location || "");
+        setCountryCodeMobile(data.attributes.countryCodeMobile || "");
+        setMobileNumber(data.attributes.mobileNumber || "");
+        setCountryCodeOffice(data.attributes.countryCodeOffice || "");
+        setOfficeNumber(data.attributes.officeNumber || "");
+        setExtensionNumber(data.attributes.extensionNumber || "");
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        // router.push(`/profile/${router.query.username}/create`); // Redirect to create page if needed
       }
     };
 
-    if (router.isReady) {
-      fetchProfileData();
-    }
-  }, [router]);
+    fetchProfileData();
+  }, [pathname, searchParams]);
 
   // ================= VIEWS
   return (
@@ -235,8 +207,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                         type="text"
                         id="username"
                         className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                        value={username}
-                        // onChange={(e) => setUsername(e.target.value)}
+                        value={slug}
                         readOnly
                         required
                       />
@@ -293,18 +264,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     />
                   </div>
                 </div>
-                {/* <div className="flex flex-col space-y-2">
-                <label htmlFor="company" >
-                  Company*
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  className="bg-secondary rounded-xl px-4 py-2 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                  value=""
-                  // onChange={(e) => setCompany(e.target.value)
-                />
-              </div> */}
                 <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="location">Location*</label>
