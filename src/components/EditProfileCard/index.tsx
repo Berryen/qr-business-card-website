@@ -222,7 +222,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
                   Profile Information
                 </button>
-                <button className="text-left p-5 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
+                <button className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
                   Connect Links
                 </button>
               </div>
