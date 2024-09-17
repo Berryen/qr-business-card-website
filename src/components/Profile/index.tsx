@@ -63,40 +63,41 @@ export const Profile: React.FC<ProfileProps> = ({
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
   console.log(profileData?.attributes.profilePhoto.data.attributes.url);
+  console.log(profileData?.attributes.name);
 
   // ================= HOOKS
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const locale = router.locale ?? "en";
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        // Use pathname or searchParams to extract slug
-        const slugFromPathname = pathname.split("/").pop();
-        const slugFromSearchParams = searchParams.get("slug");
+  // useEffect(() => {
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       await new Promise((resolve) => setTimeout(resolve, 1000));
+  //       // Use pathname or searchParams to extract slug
+  //       const slugFromPathname = pathname.split("/").pop();
+  //       const slugFromSearchParams = searchParams.get("slug");
 
-        const slug = slugFromPathname || slugFromSearchParams;
+  //       const slug = slugFromPathname || slugFromSearchParams;
 
-        if (!slug) {
-          throw new Error("Slug not found in pathname or searchParams");
-        }
-        const { data } = await fetchStrapiAPI(`/profiles/${slug}`, {
-          populate: "*",
-          locale: localeTranslation(locale),
-        });
+  //       if (!slug) {
+  //         throw new Error("Slug not found in pathname or searchParams");
+  //       }
+  //       const { data } = await fetchStrapiAPI(`/profiles/${slug}`, {
+  //         populate: "*",
+  //         locale: localeTranslation(locale),
+  //       });
 
-        setProfileData(data);
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       setProfileData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching profile data:", error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchProfileData();
-  }, [pathname, searchParams]);
+  //   fetchProfileData();
+  // }, [pathname, searchParams]);
 
   // ================= VARIABLES
   const buttonClass = clsx(
