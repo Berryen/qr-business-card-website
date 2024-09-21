@@ -396,7 +396,7 @@ END:VCARD`;
                 <div className="p-2 bg-secondary rounded-2xl ring-1 ring-stroke ml-10">
                   <div className="space-y-2">
                     <Link
-                      href={`/profile/${username}/edit`}
+                      href={`/profile/${username}/edit-profile`}
                       className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
                     >
                       <span className="text-offwhite text-lg">

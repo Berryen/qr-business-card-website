@@ -11,6 +11,7 @@ import logo_fyp from "assets/logo_fyp.png";
 import { ProfileInfo } from "./props";
 import { isAuthenticated as clearAuthToken } from "helpers/authUtils";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -178,9 +179,9 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 <div className="flex flex-row items-center p-4 rounded-2xl ring-1 ring-stroke bg-primarybutton">
                   <div className="flex flex-row items-center space-x-4">
                     <div className="w-14 h-14 rounded-xl bg-stroke"></div>
-                    <p className="text-offwhite">Create Card</p>
+                    <p className="text-offwhite">Edit Card</p>
                   </div>
-                  <ChevronDown className="w-6 h-6 ml-auto" color="#555557" />
+                  {/* <ChevronDown className="w-6 h-6 ml-auto" color="#555557" /> */}
                 </div>
               </div>
 
@@ -194,9 +195,12 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
                   Profile Information
                 </button>
-                <button className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
-                  Connect Links
-                </button>
+                <Link
+                  href={`/profile/${slug}/edit-connections`}
+                  className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
+                >
+                  <button type="button">Connect Links</button>
+                </Link>
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10 pb-16">
@@ -349,6 +353,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                   </div>
                   <div className="flex flex-col mt-10 w-36">
                     <button
+                      type="button"
                       className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
                       onClick={handleLogout}
                     >
