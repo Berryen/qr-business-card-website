@@ -361,14 +361,14 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                   <div className="flex flex-col mt-10 w-36">
                     <button
                       type="submit"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
                     >
                       Submit
                     </button>
                   </div>
                   <div className="flex flex-col mt-10 w-36">
                     <button
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
                       onClick={handleLogout}
                     >
                       Logout

@@ -16,7 +16,7 @@ interface ProfileProps {
   profileData: ProfileInfo;
 }
 
-export const EditConnectLinks: React.FC<ProfileProps> = () => {
+export const AccountSettings: React.FC<ProfileProps> = () => {
   const router = useRouter();
 
   // ================= STATE
@@ -171,7 +171,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
               <div className="flex flex-row items-center p-4 rounded-2xl ring-1 ring-stroke bg-primarybutton">
                 <div className="flex flex-row items-center space-x-4">
                   <div className="w-14 h-14 rounded-xl bg-stroke"></div>
-                  <p className="text-offwhite">Edit Card</p>
+                  <p className="text-offwhite">Account Settings</p>
                 </div>
                 {/* <ChevronDown className="w-6 h-6 ml-auto" color="#555557" /> */}
               </div>
@@ -190,18 +190,18 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
               >
                 <button>Profile Information</button>
               </Link>
+              <Link
+                href={`/profile/${slug}/edit-connections`}
+                className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
+              >
+                <button type="button">Connect Links</button>
+              </Link>
               <button
                 type="button"
                 className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200"
               >
-                Connect Links
+                Change Password
               </button>
-              <Link
-                href={`/profile/${slug}/account`}
-                className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
-              >
-                <button>Change Password</button>
-              </Link>
             </div>
             <div className="flex flex-col space-y-10 w-4/5 m-10">
               <div className="flex flex-col space-y-10 pb-16">
@@ -217,17 +217,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                       required
                     />
                   </div>
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="displayName">Display Name*</label>
-                    <input
-                      type="text"
-                      id="displayName"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      required
-                    />
-                  </div>
+                  <div className="flex flex-col space-y-2 w-1/2"></div>
                 </div>
 
                 <div className="flex flex-row space-x-10">
@@ -242,105 +232,18 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                       required
                     />
                   </div>
-                  <div className="flex flex-col space-y-2 w-1/2"></div>
+                  <div className="flex flex-col space-y-2 w-1/2">
+                    <label htmlFor="company">Company*</label>
+                    <input
+                      type="text"
+                      id="company"
+                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="company">Company*</label>
-                  <input
-                    type="text"
-                    id="company"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="jobTitle">Job Title*</label>
-                  <input
-                    type="text"
-                    id="jobTitle"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="location">Location*</label>
-                  <input
-                    type="text"
-                    id="location"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2"></div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="countryCode">Country Code (Mobile)</label>
-                  <input
-                    type="text"
-                    id="countryCode"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={countryCodeMobile}
-                    onChange={(e) => setCountryCodeMobile(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="mobileNumber">Mobile Number</label>
-                  <input
-                    type="tel"
-                    id="mobileNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="countryCode">Country Code (Work)</label>
-                  <input
-                    type="text"
-                    id="countryCode"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={countryCodeOffice}
-                    onChange={(e) => setCountryCodeOffice(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="officeNumber">Office Number</label>
-                  <input
-                    type="tel"
-                    id="officeNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={officeNumber}
-                    onChange={(e) => setOfficeNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="extensionNumber">
-                    Office Extension Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="extensionNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={extensionNumber}
-                    onChange={(e) => setExtensionNumber(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2"></div>
               </div>
               <div className="flex flex-row space-x-10 justify-between">
                 <div className="flex flex-col w-1/2"></div>

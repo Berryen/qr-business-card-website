@@ -409,13 +409,15 @@ END:VCARD`;
                       <span className="text-offwhite text-lg">Saved Cards</span>
                       <Bookmark className="w-6 h-6" color="#555557" />
                     </div>
-
-                    <div className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton">
+                    <Link
+                      href={`/profile/${username}/account`}
+                      className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"
+                    >
                       <span className="text-offwhite text-lg">
                         Account Settings
                       </span>
                       <Settings className="w-6 h-6" color="#555557" />
-                    </div>
+                    </Link>
 
                     <div
                       className="flex items-center justify-between p-5 rounded-2xl hover:ring-1 hover:ring-stroke cursor-pointer hover:bg-primarybutton"

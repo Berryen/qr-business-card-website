@@ -201,6 +201,12 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 >
                   <button type="button">Connect Links</button>
                 </Link>
+                <Link
+                  href={`/profile/${slug}/account`}
+                  className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
+                >
+                  <button>Change Password</button>
+                </Link>
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10 pb-16">
@@ -346,15 +352,26 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                   <div className="flex flex-col mt-10 w-36">
                     <button
                       type="submit"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
                     >
                       Submit
                     </button>
                   </div>
+                  <Link
+                    href={`/profile/${slug}/home`}
+                    className="flex flex-col mt-10 w-36"
+                  >
+                    <button
+                      type="button"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                    >
+                      Back to home
+                    </button>
+                  </Link>
                   <div className="flex flex-col mt-10 w-36">
                     <button
                       type="button"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-strokeg"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
                       onClick={handleLogout}
                     >
                       Logout
