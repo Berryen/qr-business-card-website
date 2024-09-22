@@ -170,7 +170,10 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
             <div className="p-4 w-1/6">
               <div className="flex flex-row items-center p-4 rounded-2xl ring-1 ring-stroke bg-primarybutton">
                 <div className="flex flex-row items-center space-x-4">
-                  <div className="w-14 h-14 rounded-xl bg-stroke"></div>
+                  <Link
+                    href={`/profile/${slug}/home`}
+                    className="w-14 h-14 rounded-xl bg-stroke"
+                  ></Link>
                   <p className="text-offwhite">Edit Card</p>
                 </div>
                 {/* <ChevronDown className="w-6 h-6 ml-auto" color="#555557" /> */}
