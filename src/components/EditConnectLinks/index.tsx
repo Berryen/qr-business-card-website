@@ -229,11 +229,11 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="linkedin"
-                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
                       value={linkedIn}
                       onChange={(e) => setLinkedIn(e.target.value)}
                     />
-                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                    <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
                       {/* Label for Display Toggle */}
                       <span className="text-offwhite">Display on profile</span>
 
@@ -251,7 +251,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                             setDisplayOnProfile(e.target.checked)
                           }
                         />
-                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
                       </label>
                     </div>
@@ -261,11 +261,11 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="linkedin"
-                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
                       value={linkedIn}
                       onChange={(e) => setLinkedIn(e.target.value)}
                     />
-                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                    <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
                       {/* Label for Display Toggle */}
                       <span className="text-offwhite">Display on profile</span>
 
@@ -283,7 +283,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                             setDisplayOnProfile(e.target.checked)
                           }
                         />
-                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
                       </label>
                     </div>
@@ -296,11 +296,11 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="linkedin"
-                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
                       value={linkedIn}
                       onChange={(e) => setLinkedIn(e.target.value)}
                     />
-                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                    <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
                       {/* Label for Display Toggle */}
                       <span className="text-offwhite">Display on profile</span>
 
@@ -318,7 +318,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                             setDisplayOnProfile(e.target.checked)
                           }
                         />
-                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
                       </label>
                     </div>

@@ -214,7 +214,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="username"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={slug}
                       readOnly
                       required
@@ -229,7 +229,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
                     <input
                       type="email"
                       id="email"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -240,7 +240,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="company"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       required

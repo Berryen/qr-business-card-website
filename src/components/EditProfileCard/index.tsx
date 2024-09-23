@@ -191,10 +191,10 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
               {/* Second column, empty or customizable */}
               <div className="w-4/5 border-l border-stroke place-content-center">
                 <p className="text-offwhite text-lg font-semibold pl-5">
-                  Edit Profile Information
+                  Edit Card Information
                 </p>
                 <p className="text-offwhite pt-2 pl-5">
-                  Update your profile details here. The information you provide
+                  Update your card details here. The information you provide
                   will be displayed on your profile card.
                 </p>
               </div>
@@ -227,7 +227,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="text"
                         id="username"
-                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={slug}
                         readOnly
                         required
@@ -238,7 +238,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="text"
                         id="displayName"
-                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         required
@@ -252,7 +252,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="email"
                         id="email"
-                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -267,7 +267,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="company"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       required
@@ -278,7 +278,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="jobTitle"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
                       required
@@ -291,7 +291,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="location"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       required
@@ -305,7 +305,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={countryCodeMobile}
                       onChange={(e) => setCountryCodeMobile(e.target.value)}
                     />
@@ -315,7 +315,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="mobileNumber"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
                     />
@@ -327,7 +327,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={countryCodeOffice}
                       onChange={(e) => setCountryCodeOffice(e.target.value)}
                     />
@@ -337,7 +337,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="officeNumber"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={officeNumber}
                       onChange={(e) => setOfficeNumber(e.target.value)}
                     />
@@ -351,7 +351,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="extensionNumber"
-                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={extensionNumber}
                       onChange={(e) => setExtensionNumber(e.target.value)}
                     />
