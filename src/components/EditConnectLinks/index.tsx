@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { fetchStrapiAPI } from "helpers/api";
 import logo_fyp from "assets/logo_fyp.png";
 import { isAuthenticated as clearAuthToken } from "helpers/authUtils";
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 // ================= INTERFACES / TYPES
@@ -22,6 +21,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
   // ================= STATE
   const [profileData, setProfileData] = useState<ProfileInfo | null>();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
   // Controlled form states for user input
   const [displayName, setDisplayName] = useState<string>("");
   const [slug, setSlug] = useState<string>("");
@@ -104,6 +104,20 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
+    }
+  };
+
+  // Function to get the country code based on the country name
+  const getCountryCode = (countryName: string | undefined) => {
+    switch (countryName) {
+      case "Malaysia (60)":
+        return "60";
+      case "Singapore (65)":
+        return "65";
+      case "Vietnam (84)":
+        return "84";
+      default:
+        return countryName;
     }
   };
 
@@ -220,6 +234,12 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
               >
                 <button>Change Password</button>
               </Link>
+              <div className="flex-grow"></div>
+              <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
+                <button type="button" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
             </div>
             <div className="flex flex-col space-y-10 w-4/5 m-10">
               <div className="flex flex-col space-y-10 pb-16">
@@ -229,7 +249,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="linkedin"
-                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke"
                       value={linkedIn}
                       onChange={(e) => setLinkedIn(e.target.value)}
                     />
@@ -257,13 +277,20 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                     </div>
                   </div>
                   <div className="flex flex-col w-1/2">
-                    <label htmlFor="linkedin">LinkedIn</label>
+                    <label htmlFor="whatsapp">WhatsApp</label>
                     <input
                       type="text"
-                      id="linkedin"
-                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
-                      value={linkedIn}
-                      onChange={(e) => setLinkedIn(e.target.value)}
+                      id="whatsapp"
+                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke"
+                      value={
+                        mobileNumber
+                          ? `(${getCountryCode(
+                              countryCodeMobile
+                            )}) ${mobileNumber}`
+                          : ""
+                      }
+                      onChange={(e) => setMobileNumber(e.target.value)}
+                      readOnly
                     />
                     <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
                       {/* Label for Display Toggle */}
@@ -288,42 +315,6 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                       </label>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col w-1/2">
-                    <label htmlFor="linkedin">LinkedIn</label>
-                    <input
-                      type="text"
-                      id="linkedin"
-                      className="bg-primary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
-                      value={linkedIn}
-                      onChange={(e) => setLinkedIn(e.target.value)}
-                    />
-                    <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
-                      {/* Label for Display Toggle */}
-                      <span className="text-offwhite">Display on profile</span>
-
-                      {/* Toggle Switch */}
-                      <label
-                        htmlFor="display-toggle"
-                        className="relative inline-flex items-center cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          id="display-toggle"
-                          className="sr-only peer"
-                          checked={displayOnProfile}
-                          onChange={(e) =>
-                            setDisplayOnProfile(e.target.checked)
-                          }
-                        />
-                        <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
-                        <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="flex flex-col space-y-2 w-1/2"></div>
                 </div>
               </div>
               <div className="flex flex-row space-x-10 justify-between">

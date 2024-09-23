@@ -205,6 +205,12 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
               >
                 Change Password
               </button>
+              <div className="flex-grow"></div>
+              <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
+                <button type="button" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
             </div>
             <div className="flex flex-col space-y-10 w-4/5 m-10">
               <div className="flex flex-col space-y-10 pb-16">

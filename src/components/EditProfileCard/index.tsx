@@ -203,7 +203,10 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
             <div className="flex-grow flex flex-row text-offwhite rounded-b-2xl">
               {/* Side navigation bar */}
               <div className="flex flex-col w-1/6 p-12 bg-primary space-y-2 border-r border-stroke rounded-bl-2xl">
-                <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
+                <button
+                  type="button"
+                  className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200"
+                >
                   Card Information
                 </button>
                 <Link
@@ -218,6 +221,12 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 >
                   <button>Change Password</button>
                 </Link>
+                <div className="flex-grow"></div>
+                <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
+                  <button type="button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10 pb-16">
@@ -300,15 +309,24 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                   <div className="flex flex-col space-y-2 w-1/2"></div>
                 </div>
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="countryCode">Country Code (Mobile)</label>
-                    <input
-                      type="text"
-                      id="countryCode"
-                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                  <div className="flex flex-col space-y-2 w-1/2 relative">
+                    <label htmlFor="countryCodeMobile">
+                      Country Code (Mobile)
+                    </label>
+                    <select
+                      id="countryCodeMobile"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke appearance-none"
                       value={countryCodeMobile}
                       onChange={(e) => setCountryCodeMobile(e.target.value)}
-                    />
+                    >
+                      <option value="">Select Country Code</option>
+                      <option value="Malaysia (60)">Malaysia (60)</option>
+                      <option value="Singapore (65)">Singapore (65)</option>
+                      <option value="Vietnam (84)">Vietnam (84)</option>
+                    </select>
+                    <div className="absolute inset-y-0 pt-6 right-4 flex items-center pointer-events-none">
+                      <ChevronDown className="w-6 h-6" color="#555557" />
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="mobileNumber">Mobile Number</label>
@@ -322,15 +340,22 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                   </div>
                 </div>
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
+                  <div className="flex flex-col space-y-2 w-1/2 relative">
                     <label htmlFor="countryCode">Country Code (Work)</label>
-                    <input
-                      type="text"
+                    <select
                       id="countryCode"
-                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke appearance-none"
                       value={countryCodeOffice}
                       onChange={(e) => setCountryCodeOffice(e.target.value)}
-                    />
+                    >
+                      <option value="">Select Country Code</option>
+                      <option value="Malaysia (60)">Malaysia (60)</option>
+                      <option value="Singapore (65)">Singapore (65)</option>
+                      <option value="Vietnam (84)">Vietnam (84)</option>
+                    </select>
+                    <div className="absolute inset-y-0 pt-6 right-4 flex items-center pointer-events-none">
+                      <ChevronDown className="w-6 h-6" color="#555557" />
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="officeNumber">Office Number</label>
