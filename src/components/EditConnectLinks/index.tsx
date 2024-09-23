@@ -23,19 +23,16 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // Controlled form states for user input
-  const [displayName, setDisplayName] = useState<string>("");
   const [slug, setSlug] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [company, setCompany] = useState<string>("");
-  const [jobTitle, setJobTitle] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
   const [countryCodeMobile, setCountryCodeMobile] = useState<string>("");
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
   const [officeNumber, setOfficeNumber] = useState<string>("");
   const [extensionNumber, setExtensionNumber] = useState<string>("");
   const [linkedIn, setLinkedIn] = useState("");
-  const [displayOnProfile, setDisplayOnProfile] = useState(true);
+  const [displayLinkedIn, setDisplayLinkedIn] = useState(true);
+  const [displayWhatsApp, setDisplayWhatsApp] = useState(true);
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -68,12 +65,8 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
 
       // Now that you have the profile ID, update the profile
       const updatedProfile = {
-        name: displayName,
         slug,
         email,
-        company,
-        jobTitle,
-        location,
         countryCodeMobile,
         mobileNumber,
         countryCodeOffice,
@@ -151,12 +144,8 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
         setProfileData(data);
 
         // Prefill form inputs with fetched data
-        setDisplayName(data.attributes.name || "");
         setSlug(data.attributes.slug || "");
         setEmail(data.attributes.email || "");
-        setCompany(data.attributes.company || "");
-        setJobTitle(data.attributes.jobTitle || "");
-        setLocation(data.attributes.location || "");
         setCountryCodeMobile(data.attributes.countryCodeMobile || "");
         setMobileNumber(data.attributes.mobileNumber || "");
         setCountryCodeOffice(data.attributes.countryCodeOffice || "");
@@ -235,6 +224,12 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                 <button>Change Password</button>
               </Link>
               <div className="flex-grow"></div>
+              <Link
+                href={`/profile/${slug}/home`}
+                className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
+              >
+                <button type="button">Back to home</button>
+              </Link>
               <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
                 <button type="button" onClick={handleLogout}>
                   Logout
@@ -242,7 +237,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-10 w-4/5 m-10">
-              <div className="flex flex-col space-y-10 pb-16">
+              <div className="flex flex-col space-y-10">
                 <div className="flex flex-row space-x-10">
                   <div className="flex flex-col w-1/2">
                     <label htmlFor="linkedin">LinkedIn</label>
@@ -259,17 +254,15 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
 
                       {/* Toggle Switch */}
                       <label
-                        htmlFor="display-toggle"
+                        htmlFor="linkedin-display-toggle"
                         className="relative inline-flex items-center cursor-pointer"
                       >
                         <input
                           type="checkbox"
-                          id="display-toggle"
+                          id="linkedin-display-toggle"
                           className="sr-only peer"
-                          checked={displayOnProfile}
-                          onChange={(e) =>
-                            setDisplayOnProfile(e.target.checked)
-                          }
+                          checked={displayLinkedIn}
+                          onChange={(e) => setDisplayLinkedIn(e.target.checked)}
                         />
                         <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
@@ -298,17 +291,15 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
 
                       {/* Toggle Switch */}
                       <label
-                        htmlFor="display-toggle"
+                        htmlFor="whatsapp-display-toggle"
                         className="relative inline-flex items-center cursor-pointer"
                       >
                         <input
                           type="checkbox"
-                          id="display-toggle"
+                          id="whatsapp-display-toggle"
                           className="sr-only peer"
-                          checked={displayOnProfile}
-                          onChange={(e) =>
-                            setDisplayOnProfile(e.target.checked)
-                          }
+                          checked={displayWhatsApp}
+                          onChange={(e) => setDisplayWhatsApp(e.target.checked)}
                         />
                         <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
@@ -317,38 +308,14 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row space-x-10 justify-between">
-                <div className="flex flex-col w-1/2"></div>
-                <div className="flex flex-row space-x-10">
-                  <Link
-                    href={`/profile/${slug}/home`}
-                    className="flex flex-col mt-10 w-36"
-                  >
-                    <button
-                      type="button"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    >
-                      Back to home
-                    </button>
-                  </Link>
-                  <div className="flex flex-col mt-10 w-36">
-                    <button
-                      type="submit"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                  {/* <div className="flex flex-col mt-10 w-36">
-                      <button
-                        type="button"
-                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
-                    </div> */}
-                </div>
+              <div className="flex flex-grow"></div>
+              <div className="flex flex-col place-self-end mt-10 w-36">
+                <button
+                  type="submit"
+                  className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                >
+                  Save
+                </button>
               </div>
             </div>
           </div>

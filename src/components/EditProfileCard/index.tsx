@@ -222,6 +222,12 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                   <button>Change Password</button>
                 </Link>
                 <div className="flex-grow"></div>
+                <Link
+                  href={`/profile/${slug}/home`}
+                  className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
+                >
+                  <button type="button">Back to home</button>
+                </Link>
                 <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
                   <button type="button" onClick={handleLogout}>
                     Logout
@@ -229,7 +235,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 </div>
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
-                <div className="flex flex-col space-y-10 pb-16">
+                <div className="flex flex-col space-y-10">
                   <div className="flex flex-row space-x-10">
                     <div className="flex flex-col space-y-2 w-1/2">
                       <label htmlFor="username">Username*</label>
@@ -368,7 +374,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     />
                   </div>
                 </div>
-                <div className="flex flex-row space-x-10">
+                {/* <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="extensionNumber">
                       Office Extension Number
@@ -382,39 +388,15 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     />
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2"></div>
-                </div>
-                <div className="flex flex-row space-x-10 justify-between">
-                  <div className="flex flex-col w-1/2"></div>
-                  <div className="flex flex-row space-x-10">
-                    <Link
-                      href={`/profile/${slug}/home`}
-                      className="flex flex-col mt-10 w-36"
-                    >
-                      <button
-                        type="button"
-                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                      >
-                        Back to home
-                      </button>
-                    </Link>
-                    <div className="flex flex-col mt-10 w-36">
-                      <button
-                        type="submit"
-                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                      >
-                        Submit
-                      </button>
-                    </div>
-                    {/* <div className="flex flex-col mt-10 w-36">
-                      <button
-                        type="button"
-                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
-                    </div> */}
-                  </div>
+                </div> */}
+                <div className="flex flex-grow"></div>
+                <div className="flex flex-col place-self-end mt-10 w-36">
+                  <button
+                    type="submit"
+                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
