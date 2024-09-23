@@ -34,6 +34,8 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
   const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
   const [officeNumber, setOfficeNumber] = useState<string>("");
   const [extensionNumber, setExtensionNumber] = useState<string>("");
+  const [linkedIn, setLinkedIn] = useState("");
+  const [displayOnProfile, setDisplayOnProfile] = useState(true);
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -77,6 +79,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
         countryCodeOffice,
         officeNumber,
         extensionNumber,
+        linkedIn,
       };
 
       const updateResponse = await fetch(
@@ -97,7 +100,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
 
       // Redirect or display success message
       alert("Profile updated successfully!");
-      router.push(`/profile/${profileData?.attributes.slug}/edit`);
+      router.push(`/profile/${profileData?.attributes.slug}/edit-connections`);
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
@@ -108,7 +111,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
         if (!pathname) {
           throw new Error("Pathname is null or undefined.");
         }
@@ -145,6 +148,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
         setCountryCodeOffice(data.attributes.countryCodeOffice || "");
         setOfficeNumber(data.attributes.officeNumber || "");
         setExtensionNumber(data.attributes.extensionNumber || "");
+        setLinkedIn(data.attributes.linkedIn || "");
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -181,7 +185,18 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
             </div>
 
             {/* Second column, empty or customizable */}
-            <div className="w-4/5 border-l border-stroke"></div>
+            <div className="w-4/5 border-l border-stroke place-content-center">
+              <p className="text-offwhite text-lg font-semibold pl-5">
+                Manage Connections
+              </p>
+              <p className="text-offwhite pt-2 pl-5">
+                When someone clicks the “Connect” button, they will see the
+                connections you have chosen to display. Please note that these
+                settings do not affect what is shown on your profile card. For
+                example, if you disable WhatsApp from being displayed, your
+                phone number will still appear on your profile card.
+              </p>
+            </div>
           </div>
 
           <div className="flex-grow flex flex-row text-offwhite rounded-b-2xl">
@@ -191,7 +206,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                 href={`/profile/${slug}/edit-profile`}
                 className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
               >
-                <button>Profile Information</button>
+                <button>Card Information</button>
               </Link>
               <button
                 type="button"
@@ -209,171 +224,139 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
             <div className="flex flex-col space-y-10 w-4/5 m-10">
               <div className="flex flex-col space-y-10 pb-16">
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="username">Username*</label>
+                  <div className="flex flex-col w-1/2">
+                    <label htmlFor="linkedin">LinkedIn</label>
                     <input
                       type="text"
-                      id="username"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={slug}
-                      readOnly
-                      required
+                      id="linkedin"
+                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      value={linkedIn}
+                      onChange={(e) => setLinkedIn(e.target.value)}
                     />
+                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                      {/* Label for Display Toggle */}
+                      <span className="text-offwhite">Display on profile</span>
+
+                      {/* Toggle Switch */}
+                      <label
+                        htmlFor="display-toggle"
+                        className="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          id="display-toggle"
+                          className="sr-only peer"
+                          checked={displayOnProfile}
+                          onChange={(e) =>
+                            setDisplayOnProfile(e.target.checked)
+                          }
+                        />
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                      </label>
+                    </div>
                   </div>
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="displayName">Display Name*</label>
+                  <div className="flex flex-col w-1/2">
+                    <label htmlFor="linkedin">LinkedIn</label>
                     <input
                       type="text"
-                      id="displayName"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      required
+                      id="linkedin"
+                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      value={linkedIn}
+                      onChange={(e) => setLinkedIn(e.target.value)}
                     />
+                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                      {/* Label for Display Toggle */}
+                      <span className="text-offwhite">Display on profile</span>
+
+                      {/* Toggle Switch */}
+                      <label
+                        htmlFor="display-toggle"
+                        className="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          id="display-toggle"
+                          className="sr-only peer"
+                          checked={displayOnProfile}
+                          onChange={(e) =>
+                            setDisplayOnProfile(e.target.checked)
+                          }
+                        />
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                      </label>
+                    </div>
                   </div>
                 </div>
 
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="email">Email*</label>
+                  <div className="flex flex-col w-1/2">
+                    <label htmlFor="linkedin">LinkedIn</label>
                     <input
-                      type="email"
-                      id="email"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
+                      type="text"
+                      id="linkedin"
+                      className="bg-secondary rounded-tl-xl rounded-tr-xl mt-2 px-4 py-4 border border-stroke focus:ring-2 focus:ring-stroke"
+                      value={linkedIn}
+                      onChange={(e) => setLinkedIn(e.target.value)}
                     />
+                    <div className="flex items-center justify-between px-4 py-4 bg-secondary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
+                      {/* Label for Display Toggle */}
+                      <span className="text-offwhite">Display on profile</span>
+
+                      {/* Toggle Switch */}
+                      <label
+                        htmlFor="display-toggle"
+                        className="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          id="display-toggle"
+                          className="sr-only peer"
+                          checked={displayOnProfile}
+                          onChange={(e) =>
+                            setDisplayOnProfile(e.target.checked)
+                          }
+                        />
+                        <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 peer-checked:bg-green-500"></div>
+                        <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+                      </label>
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2"></div>
                 </div>
               </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="company">Company*</label>
-                  <input
-                    type="text"
-                    id="company"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="jobTitle">Job Title*</label>
-                  <input
-                    type="text"
-                    id="jobTitle"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={jobTitle}
-                    onChange={(e) => setJobTitle(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="location">Location*</label>
-                  <input
-                    type="text"
-                    id="location"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2"></div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="countryCode">Country Code (Mobile)</label>
-                  <input
-                    type="text"
-                    id="countryCode"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={countryCodeMobile}
-                    onChange={(e) => setCountryCodeMobile(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="mobileNumber">Mobile Number</label>
-                  <input
-                    type="tel"
-                    id="mobileNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={mobileNumber}
-                    onChange={(e) => setMobileNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="countryCode">Country Code (Work)</label>
-                  <input
-                    type="text"
-                    id="countryCode"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={countryCodeOffice}
-                    onChange={(e) => setCountryCodeOffice(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="officeNumber">Office Number</label>
-                  <input
-                    type="tel"
-                    id="officeNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={officeNumber}
-                    onChange={(e) => setOfficeNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-row space-x-10">
-                <div className="flex flex-col space-y-2 w-1/2">
-                  <label htmlFor="extensionNumber">
-                    Office Extension Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="extensionNumber"
-                    className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                    value={extensionNumber}
-                    onChange={(e) => setExtensionNumber(e.target.value)}
-                  />
-                </div>
-                <div className="flex flex-col space-y-2 w-1/2"></div>
-              </div>
               <div className="flex flex-row space-x-10 justify-between">
                 <div className="flex flex-col w-1/2"></div>
-                <div className="flex flex-col mt-10 w-36">
-                  <button
-                    type="submit"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                <div className="flex flex-row space-x-10">
+                  <Link
+                    href={`/profile/${slug}/home`}
+                    className="flex flex-col mt-10 w-36"
                   >
-                    Submit
-                  </button>
-                </div>
-                <Link
-                  href={`/profile/${slug}/home`}
-                  className="flex flex-col mt-10 w-36"
-                >
-                  <button
-                    type="button"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                  >
-                    Back to home
-                  </button>
-                </Link>
-                <div className="flex flex-col mt-10 w-36">
-                  <button
-                    type="button"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
+                    <button
+                      type="button"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                    >
+                      Back to home
+                    </button>
+                  </Link>
+                  <div className="flex flex-col mt-10 w-36">
+                    <button
+                      type="submit"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                  {/* <div className="flex flex-col mt-10 w-36">
+                      <button
+                        type="button"
+                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div> */}
                 </div>
               </div>
             </div>

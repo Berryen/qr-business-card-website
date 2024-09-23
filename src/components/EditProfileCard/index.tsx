@@ -99,7 +99,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
 
       // Redirect or display success message
       alert("Profile updated successfully!");
-      router.push(`/profile/${profileData?.attributes.slug}/edit`);
+      router.push(`/profile/${profileData?.attributes.slug}/edit-profile`);
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
@@ -110,7 +110,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
         if (!pathname) {
           throw new Error("Pathname is null or undefined.");
         }
@@ -167,9 +167,9 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         <title>Create Profile Card</title>
       </Head>
       <motion.div
-        initial={{ opacity: 0 }} // Starting state: invisible
+        initial={{ opacity: 1 }} // Starting state: invisible
         animate={{ opacity: 1 }} // Ending state: fully visible
-        transition={{ duration: 1 }} // Duration of the fade-in effect (1 second)
+        transition={{ duration: 0 }} // Duration of the fade-in effect (1 second)
       >
         <form onSubmit={handleFormSubmit}>
           <div className="flex flex-col min-w-screen min-h-[89vh] m-14 bg-secondary ring-1 ring-stroke rounded-2xl">
@@ -189,14 +189,22 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
               </div>
 
               {/* Second column, empty or customizable */}
-              <div className="w-4/5 border-l border-stroke"></div>
+              <div className="w-4/5 border-l border-stroke place-content-center">
+                <p className="text-offwhite text-lg font-semibold pl-5">
+                  Edit Profile Information
+                </p>
+                <p className="text-offwhite pt-2 pl-5">
+                  Update your profile details here. The information you provide
+                  will be displayed on your profile card.
+                </p>
+              </div>
             </div>
 
             <div className="flex-grow flex flex-row text-offwhite rounded-b-2xl">
               {/* Side navigation bar */}
               <div className="flex flex-col w-1/6 p-12 bg-primary space-y-2 border-r border-stroke rounded-bl-2xl">
                 <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
-                  Profile Information
+                  Card Information
                 </button>
                 <Link
                   href={`/profile/${slug}/edit-connections`}
@@ -219,7 +227,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="text"
                         id="username"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={slug}
                         readOnly
                         required
@@ -230,7 +238,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="text"
                         id="displayName"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         required
@@ -244,7 +252,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="email"
                         id="email"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -259,7 +267,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="company"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       required
@@ -270,7 +278,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="jobTitle"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
                       required
@@ -283,7 +291,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="location"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       required
@@ -297,7 +305,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={countryCodeMobile}
                       onChange={(e) => setCountryCodeMobile(e.target.value)}
                     />
@@ -307,7 +315,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="mobileNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
                     />
@@ -319,7 +327,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={countryCodeOffice}
                       onChange={(e) => setCountryCodeOffice(e.target.value)}
                     />
@@ -329,7 +337,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="officeNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={officeNumber}
                       onChange={(e) => setOfficeNumber(e.target.value)}
                     />
@@ -343,7 +351,7 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="extensionNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={extensionNumber}
                       onChange={(e) => setExtensionNumber(e.target.value)}
                     />
@@ -352,33 +360,35 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                 </div>
                 <div className="flex flex-row space-x-10 justify-between">
                   <div className="flex flex-col w-1/2"></div>
-                  <div className="flex flex-col mt-10 w-36">
-                    <button
-                      type="submit"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                  <div className="flex flex-row space-x-10">
+                    <Link
+                      href={`/profile/${slug}/home`}
+                      className="flex flex-col mt-10 w-36"
                     >
-                      Submit
-                    </button>
-                  </div>
-                  <Link
-                    href={`/profile/${slug}/home`}
-                    className="flex flex-col mt-10 w-36"
-                  >
-                    <button
-                      type="button"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    >
-                      Back to home
-                    </button>
-                  </Link>
-                  <div className="flex flex-col mt-10 w-36">
-                    <button
-                      type="button"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
+                      <button
+                        type="button"
+                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                      >
+                        Back to home
+                      </button>
+                    </Link>
+                    <div className="flex flex-col mt-10 w-36">
+                      <button
+                        type="submit"
+                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                    {/* <div className="flex flex-col mt-10 w-36">
+                      <button
+                        type="button"
+                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div> */}
                   </div>
                 </div>
               </div>

@@ -114,7 +114,7 @@ export const Login: React.FC = () => {
                   setUsername(e.target.value);
                   if (errors.username) setErrors({ ...errors, username: "" }); // Clear error when typing
                 }}
-                className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
+                className={`w-full px-4 py-4 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
                   errors.username
                     ? "ring-2 ring-red-500"
                     : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
@@ -137,7 +137,7 @@ export const Login: React.FC = () => {
                   setPassword(e.target.value);
                   if (errors.password) setErrors({ ...errors, password: "" }); // Clear error when typing
                 }}
-                className={`w-full px-4 py-3 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
+                className={`w-full px-4 py-4 text-offwhite placeholder-offgray bg-primary rounded-xl focus:outline-none ${
                   errors.password
                     ? "ring-2 ring-red-500"
                     : "ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
@@ -151,7 +151,7 @@ export const Login: React.FC = () => {
             <div>
               <button
                 type="submit"
-                className="w-full px-4 py-3 font-medium text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                className="w-full px-4 py-4 font-medium text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
               >
                 Sign in
               </button>

@@ -191,14 +191,22 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
               </div>
 
               {/* Second column, empty or customizable */}
-              <div className="w-4/5 border-l border-stroke"></div>
+              <div className="w-4/5 border-l border-stroke place-content-center">
+                <p className="text-offwhite text-lg font-semibold pl-5">
+                  Create Profile Card
+                </p>
+                <p className="text-offwhite pt-2 pl-5">
+                  Create a personal card unique to you The information you
+                  provide will be displayed on your profile card.
+                </p>
+              </div>
             </div>
 
             <div className="flex-grow flex flex-row text-offwhite rounded-b-2xl">
               {/* Side navigation bar */}
               <div className="flex flex-col w-1/6 p-12 bg-primary space-y-2 border-r border-stroke rounded-bl-2xl">
                 <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
-                  Profile Information
+                  Card Information
                 </button>
                 <button className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
                   Connect Links

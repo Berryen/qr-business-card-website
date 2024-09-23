@@ -97,7 +97,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
 
       // Redirect or display success message
       alert("Profile updated successfully!");
-      router.push(`/profile/${profileData?.attributes.slug}/edit`);
+      router.push(`/profile/${profileData?.attributes.slug}/account`);
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
@@ -108,7 +108,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
         if (!pathname) {
           throw new Error("Pathname is null or undefined.");
         }
@@ -191,7 +191,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
                 href={`/profile/${slug}/edit-profile`}
                 className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200"
               >
-                <button>Profile Information</button>
+                <button>Card Information</button>
               </Link>
               <Link
                 href={`/profile/${slug}/edit-connections`}
@@ -214,7 +214,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="username"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={slug}
                       readOnly
                       required
@@ -225,22 +225,22 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
 
                 <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="email">Email*</label>
+                    <label htmlFor="email">Current Password</label>
                     <input
                       type="email"
                       id="email"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="company">Company*</label>
+                    <label htmlFor="company">New Password</label>
                     <input
                       type="text"
                       id="company"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-secondary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       required
@@ -250,33 +250,35 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
               </div>
               <div className="flex flex-row space-x-10 justify-between">
                 <div className="flex flex-col w-1/2"></div>
-                <div className="flex flex-col mt-10 w-36">
-                  <button
-                    type="submit"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                <div className="flex flex-row space-x-10">
+                  <Link
+                    href={`/profile/${slug}/home`}
+                    className="flex flex-col mt-10 w-36"
                   >
-                    Submit
-                  </button>
-                </div>
-                <Link
-                  href={`/profile/${slug}/home`}
-                  className="flex flex-col mt-10 w-36"
-                >
-                  <button
-                    type="button"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                  >
-                    Back to home
-                  </button>
-                </Link>
-                <div className="flex flex-col mt-10 w-36">
-                  <button
-                    type="button"
-                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
+                    <button
+                      type="button"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                    >
+                      Back to home
+                    </button>
+                  </Link>
+                  <div className="flex flex-col mt-10 w-36">
+                    <button
+                      type="submit"
+                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                  {/* <div className="flex flex-col mt-10 w-36">
+                      <button
+                        type="button"
+                        className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div> */}
                 </div>
               </div>
             </div>
