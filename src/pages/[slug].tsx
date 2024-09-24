@@ -53,6 +53,13 @@ export const getServerSideProps = async ({
             },
           },
         },
+        cv: {
+          data: {
+            attributes: {
+              url: data.attributes.cv.data.attributes.url,
+            },
+          },
+        },
       },
 
       // Map the data to your ProfileInfo type

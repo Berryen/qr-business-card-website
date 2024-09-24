@@ -23,5 +23,12 @@ export type ProfileInfo = {
         };
       };
     };
+    cv: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
   };
 };
