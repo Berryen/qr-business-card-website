@@ -208,9 +208,6 @@ END:VCARD`;
   };
 
   const profileURL = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`;
-  console.log(
-    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`
-  );
 
   const handleLogout = () => {
     clearAuthToken(); // Clear the token from localStorage or cookies
@@ -225,10 +222,6 @@ END:VCARD`;
         setIsLoading(true);
 
         const { username } = router.query;
-        console.log(
-          "Homepagetsx fetched username from router.query:",
-          router.query
-        );
 
         // Ensure `username` is present
         if (!username) {
@@ -243,7 +236,6 @@ END:VCARD`;
           populate: "*",
           locale: localeTranslation(locale),
         });
-        console.log("Homepagetsx fetched profile data:", JSON.stringify(data));
 
         // Check if there's an error or no data
         if (error || !data || data.length === 0) {
@@ -264,8 +256,6 @@ END:VCARD`;
       fetchProfileData();
     }
   }, [router.query, router.isReady]);
-
-  console.log("Homepagetsx profileData: " + JSON.stringify(profileData));
 
   // useEffect(() => {
   //   const isLoggedIn = checkAuthentication();

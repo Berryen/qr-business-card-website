@@ -56,9 +56,6 @@ export const Login: React.FC = () => {
           }
         );
         const profileData = await profileRes.json();
-        console.log("logintsx profile data: " + JSON.stringify(profileData));
-        console.log("logintsx username: " + JSON.stringify(user.username));
-
         if (profileData.length === 0) {
           // No profile found, redirect to profile creation
           router.push(`/profile/${user.username}/create`);

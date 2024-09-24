@@ -118,7 +118,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
       if (profilePhoto) {
         profilePhotoId = await uploadProfilePhoto(profilePhoto);
       }
-      console.log(profilePhotoId);
 
       // Now that you have the profile ID, update the profile
       const updatedProfile = {
@@ -134,7 +133,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         countryCodeOffice,
         officeNumber,
       };
-      console.log(JSON.stringify(updatedProfile));
 
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${profileId}`,

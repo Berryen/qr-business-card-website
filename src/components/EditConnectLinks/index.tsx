@@ -85,7 +85,6 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
       if (!updateResponse.ok) {
         throw new Error("Failed to update profile");
       }
-      console.log(JSON.stringify({ data: updatedProfile }));
 
       // Redirect or display success message
       alert("Profile updated successfully!");

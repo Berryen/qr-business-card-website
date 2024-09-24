@@ -62,8 +62,6 @@ export const Profile: React.FC<ProfileProps> = ({
   const [isSharePopupVisible, setSharePopupVisibility] = useState(false);
   const [isConnectPopupVisible, setConnectPopupVisibility] = useState(false);
   const [profileData, setProfileData] = useState<ProfileInfo | null>(null);
-  console.log(profileData?.attributes.profilePhoto.data.attributes.url);
-  console.log(profileData?.attributes.name);
 
   // ================= HOOKS
   const pathname = usePathname();
