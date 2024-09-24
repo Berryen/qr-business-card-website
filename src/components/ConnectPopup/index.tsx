@@ -20,6 +20,7 @@ interface ProfileInfo {
     extensionNumber: string;
     linkedIn: string;
     showWhatsapp: boolean;
+    showLinkedIn: boolean;
   };
 }
 
@@ -106,7 +107,7 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
           },
         ]
       : []),
-    ...(profile.attributes.linkedIn
+    ...(profile.attributes.showLinkedIn && profile.attributes.linkedIn
       ? [
           {
             value: "linkedin",

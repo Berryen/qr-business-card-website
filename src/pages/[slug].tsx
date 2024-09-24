@@ -45,6 +45,7 @@ export const getServerSideProps = async ({
         location: data.attributes.location,
         linkedIn: data.attributes.linkedIn,
         showWhatsapp: data.attributes.showWhatsapp,
+        showLinkedIn: data.attributes.showLinkedIn,
         profilePhoto: {
           data: {
             attributes: {

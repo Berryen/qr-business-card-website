@@ -546,7 +546,7 @@ END:VCARD`;
                       </div>
                     </div>
                   )}
-                {profileData?.attributes.linkedIn && (
+                {/* {profileData?.attributes.linkedIn && (
                   <div className="inline-flex">
                     <div className="pl-2 pr-4 pt-3 self-start">
                       <Linkedin className="w-6 h-6" color="#555557" />
@@ -558,7 +558,7 @@ END:VCARD`;
                       )}
                     </div>
                   </div>
-                )}
+                )} */}
                 <div className="inline-flex">
                   <div className="pl-2 pr-4 pt-4 self-start">
                     <MapPin className="w-6 h-6" color="#555557" />

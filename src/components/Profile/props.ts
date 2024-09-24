@@ -15,6 +15,7 @@ export type ProfileInfo = {
     location: string;
     linkedIn: string;
     showWhatsapp: boolean;
+    showLinkedIn: boolean;
     profilePhoto: {
       data: {
         attributes: {

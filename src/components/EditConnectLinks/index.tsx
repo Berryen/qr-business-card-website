@@ -27,12 +27,9 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
   const [email, setEmail] = useState<string>("");
   const [countryCodeMobile, setCountryCodeMobile] = useState<string>("");
   const [mobileNumber, setMobileNumber] = useState<string>("");
-  const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
-  const [officeNumber, setOfficeNumber] = useState<string>("");
-  const [extensionNumber, setExtensionNumber] = useState<string>("");
   const [linkedIn, setLinkedIn] = useState("");
-  const [displayLinkedIn, setDisplayLinkedIn] = useState(true);
-  const [displayWhatsApp, setDisplayWhatsApp] = useState(true);
+  const [showLinkedIn, setShowLinkedIn] = useState(true);
+  const [showWhatsapp, setShowWhatsapp] = useState(true);
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -69,10 +66,9 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
         email,
         countryCodeMobile,
         mobileNumber,
-        countryCodeOffice,
-        officeNumber,
-        extensionNumber,
         linkedIn,
+        showLinkedIn,
+        showWhatsapp,
       };
 
       const updateResponse = await fetch(
@@ -148,10 +144,9 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
         setEmail(data.attributes.email || "");
         setCountryCodeMobile(data.attributes.countryCodeMobile || "");
         setMobileNumber(data.attributes.mobileNumber || "");
-        setCountryCodeOffice(data.attributes.countryCodeOffice || "");
-        setOfficeNumber(data.attributes.officeNumber || "");
-        setExtensionNumber(data.attributes.extensionNumber || "");
         setLinkedIn(data.attributes.linkedIn || "");
+        setShowLinkedIn(data.attributes.showLinkedIn);
+        setShowWhatsapp(data.attributes.showWhatsapp);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -261,8 +256,8 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                           type="checkbox"
                           id="linkedin-display-toggle"
                           className="sr-only peer"
-                          checked={displayLinkedIn}
-                          onChange={(e) => setDisplayLinkedIn(e.target.checked)}
+                          checked={showLinkedIn}
+                          onChange={(e) => setShowLinkedIn(e.target.checked)}
                         />
                         <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
@@ -282,7 +277,7 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                             )}) ${mobileNumber}`
                           : ""
                       }
-                      onChange={(e) => setMobileNumber(e.target.value)}
+                      // onChange={(e) => setMobileNumber(e.target.value)}
                       readOnly
                     />
                     <div className="flex items-center justify-between px-4 py-4 bg-primary rounded-bl-xl rounded-br-xl border-b border-l border-r border-stroke">
@@ -298,8 +293,8 @@ export const EditConnectLinks: React.FC<ProfileProps> = () => {
                           type="checkbox"
                           id="whatsapp-display-toggle"
                           className="sr-only peer"
-                          checked={displayWhatsApp}
-                          onChange={(e) => setDisplayWhatsApp(e.target.checked)}
+                          checked={showWhatsapp}
+                          onChange={(e) => setShowWhatsapp(e.target.checked)}
                         />
                         <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-green-600"></div>
                         <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
