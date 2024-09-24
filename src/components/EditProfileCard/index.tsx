@@ -1,5 +1,5 @@
 import "helpers/polyfill";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import bg_other from "assets/bg_other.png";
 import clsx from "clsx";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -24,7 +24,10 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
   // ================= STATE
   const [profileData, setProfileData] = useState<ProfileInfo | null>();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [previewURL, setPreviewURL] = useState<string | null>(null);
+
   // Controlled form states for user input
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [displayName, setDisplayName] = useState<string>("");
   const [slug, setSlug] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -35,7 +38,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
   const [officeNumber, setOfficeNumber] = useState<string>("");
-  const [extensionNumber, setExtensionNumber] = useState<string>("");
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -47,6 +49,51 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
     clearAuthToken(); // Clear the token from localStorage or cookies
     setIsAuthenticated(false); // Update the state
     router.push("/"); // Redirect to login page
+  };
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Reference to the hidden file input
+
+  const handleImageClick = () => {
+    // Trigger click on the hidden file input
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setProfilePhoto(file);
+
+    if (file) {
+      // Create a local URL for the file
+      setPreviewURL(URL.createObjectURL(file));
+    } else {
+      setPreviewURL(null); // Reset preview URL if no file is selected
+    }
+  };
+
+  const profileURL = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profileData?.attributes.profilePhoto.data.attributes.url}`;
+
+  const uploadProfilePhoto = async (photoFile: File) => {
+    const formData = new FormData();
+    formData.append("files", photoFile);
+
+    const uploadRes = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const uploadData = await uploadRes.json();
+
+    if (uploadRes.ok && uploadData.length > 0) {
+      return uploadData[0].id; // Return the ID of the uploaded file
+    } else {
+      throw new Error("Image upload failed");
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -66,8 +113,16 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         throw new Error("Profile not found");
       }
 
+      let profilePhotoId = null;
+
+      if (profilePhoto) {
+        profilePhotoId = await uploadProfilePhoto(profilePhoto);
+      }
+      console.log(profilePhotoId);
+
       // Now that you have the profile ID, update the profile
       const updatedProfile = {
+        profilePhoto: profilePhotoId,
         name: displayName,
         slug,
         email,
@@ -78,8 +133,8 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         mobileNumber,
         countryCodeOffice,
         officeNumber,
-        extensionNumber,
       };
+      console.log(JSON.stringify(updatedProfile));
 
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${profileId}`,
@@ -95,7 +150,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
       if (!updateResponse.ok) {
         throw new Error("Failed to update profile");
       }
-      console.log(JSON.stringify({ data: updatedProfile }));
 
       // Redirect or display success message
       alert("Profile updated successfully!");
@@ -146,7 +200,6 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         setMobileNumber(data.attributes.mobileNumber || "");
         setCountryCodeOffice(data.attributes.countryCodeOffice || "");
         setOfficeNumber(data.attributes.officeNumber || "");
-        setExtensionNumber(data.attributes.extensionNumber || "");
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -154,6 +207,14 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
 
     fetchProfileData();
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    return () => {
+      if (previewURL) {
+        URL.revokeObjectURL(previewURL);
+      }
+    };
+  }, [previewURL]);
 
   // ================= VIEWS
   return (
@@ -236,6 +297,27 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10">
+                  <div className="flex flex-row space-x-10">
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <img
+                        className="w-32 h-32 object-cover rounded-full cursor-pointer hover:opacity-80"
+                        src={previewURL || profileURL} // Use previewURL if available
+                        alt="Contact Avatar"
+                        width={150}
+                        height={150}
+                        onClick={handleImageClick} // Trigger file input on click
+                      />
+                      <input
+                        type="file"
+                        id="profilePhoto"
+                        ref={fileInputRef} // Set ref for the hidden input
+                        className="hidden" // Hide the file input
+                        onChange={handleFileChange}
+                        accept="image/*" // Accept image files only
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2 w-1/2"></div>
+                  </div>
                   <div className="flex flex-row space-x-10">
                     <div className="flex flex-col space-y-2 w-1/2">
                       <label htmlFor="username">Username*</label>
