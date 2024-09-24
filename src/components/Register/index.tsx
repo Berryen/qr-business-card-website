@@ -34,7 +34,7 @@ export const Register: React.FC = () => {
 
     // Username validation
     if (!username) {
-      tempErrors.email = "Please enter your username.";
+      tempErrors.username = "Please enter your username.";
       isValid = false;
     }
 

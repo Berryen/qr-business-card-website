@@ -6,9 +6,7 @@ import { ProfileInfo } from "./props";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { fetchStrapiAPI } from "helpers/api";
-import logo_fyp from "assets/logo_fyp.png";
 import { isAuthenticated as clearAuthToken } from "helpers/authUtils";
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 // ================= INTERFACES / TYPES
@@ -17,28 +15,24 @@ interface ProfileProps {
 }
 
 export const AccountSettings: React.FC<ProfileProps> = () => {
-  const router = useRouter();
-
   // ================= STATE
   const [profileData, setProfileData] = useState<ProfileInfo | null>();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  // Controlled form states for user input
-  const [displayName, setDisplayName] = useState<string>("");
-  const [slug, setSlug] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [company, setCompany] = useState<string>("");
-  const [jobTitle, setJobTitle] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [countryCodeMobile, setCountryCodeMobile] = useState<string>("");
-  const [mobileNumber, setMobileNumber] = useState<string>("");
-  const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
-  const [officeNumber, setOfficeNumber] = useState<string>("");
-  const [extensionNumber, setExtensionNumber] = useState<string>("");
+  const [slug, setSlug] = useState<string>(""); //same as username, just different collection type (Profile)
+  const [password, setPassword] = useState(""); //current password
+  const [newPassword, setNewPassword] = useState(""); //new password
+  const [confirmPassword, setConfirmPassword] = useState(""); //confirm new password
+  const [errors, setErrors] = useState({
+    password: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [globalError, setGlobalError] = useState("");
+  const router = useRouter();
 
   // ================= HOOKS
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const logo = logo_fyp.src;
 
   // ================= EVENTS
   const handleLogout = () => {
@@ -47,60 +41,67 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
     router.push("/"); // Redirect to login page
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Basic validation
+    let tempErrors = {
+      password: "",
+      newPassword: "",
+      confirmPassword: "",
+    };
+    let isValid = true;
+
+    // Password validation
+    if (!password) {
+      tempErrors.password = "Please enter your password.";
+      isValid = false;
+    }
+
+    // Confirm password validation
+    if (newPassword !== confirmPassword) {
+      tempErrors.confirmPassword =
+        "New password and confirmation password do not match.";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+
+    // Proceed only if validation passes
+    if (!isValid) return;
+
     try {
-      // Fetch the profile by slug to get the profile ID
-      const fetchProfileResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles?filters[slug][$eq]=${profileData?.attributes.slug}`
-      );
-      const fetchProfileData = await fetchProfileResponse.json();
-
-      // Assuming the profile exists, extract the profile ID
-      const profileId = fetchProfileData.data[0]?.id;
-
-      if (!profileId) {
-        throw new Error("Profile not found");
-      }
-
-      // Now that you have the profile ID, update the profile
-      const updatedProfile = {
-        name: displayName,
-        slug,
-        email,
-        company,
-        jobTitle,
-        location,
-        countryCodeMobile,
-        mobileNumber,
-        countryCodeOffice,
-        officeNumber,
-        extensionNumber,
-      };
-
-      const updateResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${profileId}`,
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/auth/change-password`,
         {
-          method: "PUT",
-          body: JSON.stringify({ data: updatedProfile }),
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
+          body: JSON.stringify({
+            currentPassword: password,
+            password: newPassword,
+            passwordConfirmation: confirmPassword,
+          }),
         }
       );
 
-      if (!updateResponse.ok) {
-        throw new Error("Failed to update profile");
+      // Check if the response was successful
+      const data = await res.json();
+      if (res.ok) {
+        alert("Password changed successfully.");
+        router.push(`/profile/${slug}/account`);
+      } else {
+        const errorMessage =
+          data?.error?.message ||
+          data?.message?.[0]?.messages?.[0]?.message ||
+          "An unexpected error occurred.";
+        setGlobalError(errorMessage);
       }
-      console.log(JSON.stringify({ data: updatedProfile }));
-
-      // Redirect or display success message
-      alert("Profile updated successfully!");
-      router.push(`/profile/${profileData?.attributes.slug}/account`);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+    } catch (err) {
+      setGlobalError("An unexpected error occurred. Please try again.");
     }
   };
 
@@ -113,38 +114,31 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
           throw new Error("Pathname is null or undefined.");
         }
 
-        // Use pathname or searchParams to extract slug
+        // Use pathname or searchParams to extract username
         const pathSegments = pathname?.split("/") || [];
-        const slugFromPathname =
+        const usernameFromPathname =
           pathSegments.length > 1
             ? pathSegments[pathSegments.length - 2]
             : null;
-        const slugFromSearchParams = searchParams?.get("slug");
+        const usernameFromSearchParams = searchParams?.get("username");
 
-        const slug = slugFromPathname || slugFromSearchParams;
+        const username = usernameFromPathname || usernameFromSearchParams;
 
-        if (!slug) {
+        if (!username) {
           throw new Error("Slug not found in pathname or searchParams");
         }
 
-        const { data } = await fetchStrapiAPI(`/profiles/${slug}`, {
+        // must use profiles instead of users
+        // configuration made in strapi to get profiles by slug/username
+        // users still gets by id
+        const { data } = await fetchStrapiAPI(`/profiles/${username}`, {
           populate: "*",
         });
 
         setProfileData(data);
 
         // Prefill form inputs with fetched data
-        setDisplayName(data.attributes.name || "");
-        setSlug(data.attributes.slug || "");
-        setEmail(data.attributes.email || "");
-        setCompany(data.attributes.company || "");
-        setJobTitle(data.attributes.jobTitle || "");
-        setLocation(data.attributes.location || "");
-        setCountryCodeMobile(data.attributes.countryCodeMobile || "");
-        setMobileNumber(data.attributes.mobileNumber || "");
-        setCountryCodeOffice(data.attributes.countryCodeOffice || "");
-        setOfficeNumber(data.attributes.officeNumber || "");
-        setExtensionNumber(data.attributes.extensionNumber || "");
+        setSlug(data.attributes.slug);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -163,7 +157,7 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
       <Head>
         <title>Create Profile Card</title>
       </Head>
-      <form onSubmit={handleFormSubmit}>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col min-w-screen min-h-[89vh] m-14 bg-secondary ring-1 ring-stroke rounded-2xl">
           <div className="flex flex-row text-offwhite bg-primary rounded-t-2xl border-b border-stroke">
             {/* First column with Create Card + Chevron */}
@@ -222,13 +216,13 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
               <div className="flex flex-col space-y-10">
                 <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="username">Username*</label>
+                    <label htmlFor="currentPassword">Current Password</label>
                     <input
-                      type="text"
-                      id="username"
+                      type="password"
+                      id="currentPassword"
                       className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={slug}
-                      readOnly
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -237,24 +231,26 @@ export const AccountSettings: React.FC<ProfileProps> = () => {
 
                 <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="email">Current Password</label>
+                    <label htmlFor="newPassword">New Password</label>
                     <input
-                      type="email"
-                      id="email"
+                      type="password"
+                      id="newPassword"
                       className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                       required
                     />
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="company">New Password</label>
+                    <label htmlFor="confirmPassword">
+                      Confirm New Password
+                    </label>
                     <input
-                      type="text"
-                      id="company"
+                      type="password"
+                      id="confirmPassword"
                       className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                     />
                   </div>
