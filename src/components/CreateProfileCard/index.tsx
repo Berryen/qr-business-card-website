@@ -13,6 +13,7 @@ import {
   getAuthenticatedUser,
   clearAuthToken,
 } from "helpers/authUtils";
+import Link from "next/link";
 
 // ================= INTERFACES / TYPES
 interface ProfileProps {
@@ -37,6 +38,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
   const [isCreateButtonVisible, setCreateButtonVisible] = useState(true);
   const [isCreateCardVisible, setCreateCardVisible] = useState(false);
 
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,7 +49,6 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [countryCodeOffice, setCountryCodeOffice] = useState("");
   const [officeNumber, setOfficeNumber] = useState("");
-  const [extensionNumber, setExtensionNumber] = useState("");
   const [profileData, setProfileData] = useState<any>(null);
   const [globalError, setGlobalError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -65,16 +66,46 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
     setIsAuthenticated(false); // Update the state
     router.push("/"); // Redirect to login page
   };
+
+  const uploadProfilePhoto = async (photoFile: File) => {
+    const formData = new FormData();
+    formData.append("files", photoFile);
+
+    const uploadRes = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const uploadData = await uploadRes.json();
+
+    if (uploadRes.ok && uploadData.length > 0) {
+      return uploadData[0].id; // Return the ID of the uploaded file
+    } else {
+      throw new Error("Image upload failed");
+    }
+  };
+
   // Handle form submission
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const authenticatedUserId = getAuthenticatedUser();
 
     try {
+      let profilePhotoId = null;
+
+      if (profilePhoto) {
+        profilePhotoId = await uploadProfilePhoto(profilePhoto);
+      }
       // Prepare data to send to Strapi
       const profileData = {
         data: {
-          profilePhoto: 1,
+          profilePhoto: profilePhotoId,
           name: displayName,
           slug: username.toLowerCase().replace(/\s+/g, "-"), // Create slug from username
           email,
@@ -85,7 +116,6 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
           mobileNumber,
           countryCodeOffice,
           officeNumber,
-          extensionNumber,
           users: authenticatedUserId,
         },
       };
@@ -208,19 +238,37 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                 <button className="bg-primarybutton text-left p-4 rounded-2xl ring-1 ring-stroke hover:bg-primarybutton transition duration-200">
                   Card Information
                 </button>
-                <button className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
-                  Connect Links
-                </button>
+                <div className="flex-grow"></div>
+                <div className="text-left p-4 rounded-2xl hover:ring-1 hover:ring-stroke hover:bg-primarybutton transition duration-200">
+                  <button type="button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
               </div>
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10 pb-16">
+                  <div className="flex flex-row space-x-10">
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <label htmlFor="profilePhoto">Profile Picture</label>
+                      <input
+                        type="file"
+                        id="profilePhoto"
+                        className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        onChange={(e) =>
+                          setProfilePhoto(e.target.files?.[0] || null)
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-2 w-1/2"></div>
+                  </div>
                   <div className="flex flex-row space-x-10">
                     <div className="flex flex-col space-y-2 w-1/2">
                       <label htmlFor="username">Username*</label>
                       <input
                         type="text"
                         id="username"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={username}
                         // onChange={(e) => setUsername(e.target.value)}
                         readOnly
@@ -232,7 +280,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="text"
                         id="displayName"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         required
@@ -246,7 +294,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                       <input
                         type="email"
                         id="email"
-                        className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -261,7 +309,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="company"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       required
@@ -272,7 +320,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="jobTitle"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
                       required
@@ -297,7 +345,7 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="text"
                       id="location"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       required
@@ -306,50 +354,66 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                   <div className="flex flex-col space-y-2 w-1/2"></div>
                 </div>
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
-                    <label htmlFor="countryCode">Country Code (Mobile)</label>
-                    <input
-                      type="text"
-                      id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                  <div className="flex flex-col space-y-2 w-1/2 relative">
+                    <label htmlFor="countryCodeMobile">
+                      Country Code (Mobile)
+                    </label>
+                    <select
+                      id="countryCodeMobile"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke appearance-none"
                       value={countryCodeMobile}
                       onChange={(e) => setCountryCodeMobile(e.target.value)}
-                    />
+                    >
+                      <option value="">Select Country Code</option>
+                      <option value="Malaysia (60)">Malaysia (60)</option>
+                      <option value="Singapore (65)">Singapore (65)</option>
+                      <option value="Vietnam (84)">Vietnam (84)</option>
+                    </select>
+                    <div className="absolute inset-y-0 pt-6 right-4 flex items-center pointer-events-none">
+                      <ChevronDown className="w-6 h-6" color="#555557" />
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="mobileNumber">Mobile Number</label>
                     <input
                       type="tel"
                       id="mobileNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
                     />
                   </div>
                 </div>
                 <div className="flex flex-row space-x-10">
-                  <div className="flex flex-col space-y-2 w-1/2">
+                  <div className="flex flex-col space-y-2 w-1/2 relative">
                     <label htmlFor="countryCode">Country Code (Work)</label>
-                    <input
-                      type="text"
+                    <select
                       id="countryCode"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke appearance-none"
                       value={countryCodeOffice}
                       onChange={(e) => setCountryCodeOffice(e.target.value)}
-                    />
+                    >
+                      <option value="">Select Country Code</option>
+                      <option value="Malaysia (60)">Malaysia (60)</option>
+                      <option value="Singapore (65)">Singapore (65)</option>
+                      <option value="Vietnam (84)">Vietnam (84)</option>
+                    </select>
+                    <div className="absolute inset-y-0 pt-6 right-4 flex items-center pointer-events-none">
+                      <ChevronDown className="w-6 h-6" color="#555557" />
+                    </div>
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="officeNumber">Office Number</label>
                     <input
                       type="tel"
                       id="officeNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={officeNumber}
                       onChange={(e) => setOfficeNumber(e.target.value)}
                     />
                   </div>
                 </div>
-                <div className="flex flex-row space-x-10">
+                {/* <div className="flex flex-row space-x-10">
                   <div className="flex flex-col space-y-2 w-1/2">
                     <label htmlFor="extensionNumber">
                       Office Extension Number
@@ -357,31 +421,21 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
                     <input
                       type="tel"
                       id="extensionNumber"
-                      className="bg-secondary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                      className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
                       value={extensionNumber}
                       onChange={(e) => setExtensionNumber(e.target.value)}
                     />
                   </div>
                   <div className="flex flex-col space-y-2 w-1/2"></div>
-                </div>
-                <div className="flex flex-row space-x-10 justify-between">
-                  <div className="flex flex-col w-1/2"></div>
-                  <div className="flex flex-col mt-10 w-36">
-                    <button
-                      type="submit"
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                  <div className="flex flex-col mt-10 w-36">
-                    <button
-                      className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
+                </div> */}
+                <div className="flex flex-grow"></div>
+                <div className="flex flex-col place-self-end mt-10 w-36">
+                  <button
+                    type="submit"
+                    className="px-4 py-3 text-primary bg-white rounded-xl hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stroke"
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </div>
