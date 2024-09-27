@@ -113,15 +113,15 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         throw new Error("Profile not found");
       }
 
-      let profilePhotoId = null;
+      let profilePhotoId =
+        profileData?.attributes.profilePhoto.data.attributes.id || null;
 
       if (profilePhoto) {
         profilePhotoId = await uploadProfilePhoto(profilePhoto);
       }
 
       // Now that you have the profile ID, update the profile
-      const updatedProfile = {
-        profilePhoto: profilePhotoId,
+      const updatedProfile: Record<string, any> = {
         name: displayName,
         slug,
         email,
@@ -133,6 +133,10 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
         countryCodeOffice,
         officeNumber,
       };
+
+      if (profilePhotoId) {
+        updatedProfile.profilePhoto = profilePhotoId;
+      }
 
       const updateResponse = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/profiles/${profileId}`,

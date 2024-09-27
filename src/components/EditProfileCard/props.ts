@@ -18,6 +18,7 @@ export type ProfileInfo = {
     profilePhoto: {
       data: {
         attributes: {
+          id: number;
           url: string;
         };
       };
