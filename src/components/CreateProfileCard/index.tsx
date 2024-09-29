@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import bg_other from "assets/bg_other.png";
 import clsx from "clsx";
-import { ChevronDown } from "react-feather";
+import { ChevronDown, Camera } from "react-feather";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { fetchStrapiAPI } from "helpers/api";
@@ -52,6 +52,8 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
   const [profileData, setProfileData] = useState<any>(null);
   const [globalError, setGlobalError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvPreviewURL, setCvPreviewURL] = useState<string | null>(null);
 
   const router = useRouter();
   const logo = logo_fyp.src;
@@ -91,6 +93,30 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
     }
   };
 
+  const uploadCv = async (cvFile: File) => {
+    const formData = new FormData();
+    formData.append("files", cvFile);
+
+    const uploadRes = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const uploadData = await uploadRes.json();
+
+    if (uploadRes.ok && uploadData.length > 0) {
+      return uploadData[0].id; // Return the ID of the uploaded CV
+    } else {
+      throw new Error("CV upload failed");
+    }
+  };
+
   // Handle form submission
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,14 +124,20 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
 
     try {
       let profilePhotoId = null;
+      let cvFileId = null;
 
       if (profilePhoto) {
         profilePhotoId = await uploadProfilePhoto(profilePhoto);
+      }
+
+      if (cvFile) {
+        cvFileId = await uploadCv(cvFile);
       }
       // Prepare data to send to Strapi
       const profileData = {
         data: {
           profilePhoto: profilePhotoId,
+          cv: cvFileId,
           name: displayName,
           slug: username.toLowerCase().replace(/\s+/g, "-"), // Create slug from username
           email,
@@ -131,7 +163,6 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
           body: JSON.stringify(profileData),
         }
       );
-      console.log("pf2" + JSON.stringify(profileData));
 
       // Parse the response
       const data = await res.json();
@@ -248,19 +279,79 @@ export const CreateProfileCard: React.FC<ProfileProps> = () => {
               <div className="flex flex-col space-y-10 w-4/5 m-10">
                 <div className="flex flex-col space-y-10 pb-16">
                   <div className="flex flex-row space-x-10">
-                    <div className="flex flex-col space-y-2 w-1/2">
+                    {/* <div className="flex flex-col space-y-2 w-1/2">
                       <label htmlFor="profilePhoto">Profile Picture</label>
                       <input
                         type="file"
                         id="profilePhoto"
-                        className="bg-primary rounded-xl px-4 py-3 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke"
+                        className="w-32 h-32 bg-primary object-cover rounded-full cursor-pointer hover:opacity-80"
                         onChange={(e) =>
                           setProfilePhoto(e.target.files?.[0] || null)
                         }
                         required
                       />
+                    </div> */}
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <label htmlFor="profilePhoto">
+                        <div className="relative">
+                          <input
+                            type="file"
+                            id="profilePhoto"
+                            className="hidden" // Hide the input
+                            onChange={(e) =>
+                              setProfilePhoto(e.target.files?.[0] || null)
+                            }
+                            required
+                          />
+                          <div className="w-32 h-32 bg-primary object-cover rounded-full flex items-center justify-center cursor-pointer hover:opacity-80">
+                            <Camera color="#555557" className="w-6 h-6" />
+                            {/* Increase icon size if needed */}
+                          </div>
+                        </div>
+                      </label>
                     </div>
-                    <div className="flex flex-col space-y-2 w-1/2"></div>
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <label htmlFor="cv">CV / Resume</label>
+                      <input
+                        type="file"
+                        id="cv"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0] || null;
+                          setCvFile(file);
+
+                          if (file) {
+                            setCvPreviewURL(URL.createObjectURL(file)); // Create a local URL for preview
+                          } else {
+                            setCvPreviewURL(null); // Reset preview if no file is selected
+                          }
+                        }}
+                        accept=".pdf, .doc, .docx" // Accept PDF and Word documents
+                      />
+                      <button
+                        type="button"
+                        onClick={() => document.getElementById("cv")?.click()}
+                        className="bg-primary text-offwhite text-left rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke hover:bg-secondary"
+                      >
+                        {cvFile ? cvFile.name : "Choose File"}
+                      </button>
+                      {cvPreviewURL && (
+                        <a
+                          href={cvPreviewURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500"
+                        >
+                          Preview CV
+                        </a>
+                      )}
+                      {!cvFile && profileData?.attributes.cv.data && (
+                        <p className="text-offgray">
+                          Current CV:{" "}
+                          {profileData.attributes.cv.data.attributes.name}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="flex flex-row space-x-10">
                     <div className="flex flex-col space-y-2 w-1/2">

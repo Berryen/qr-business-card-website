@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { X, Mail, Phone, Briefcase, Linkedin, Copy } from "react-feather";
+import {
+  X,
+  Mail,
+  Phone,
+  Briefcase,
+  Linkedin,
+  Copy,
+  FileText,
+} from "react-feather";
 import WhatsApp from "assets/whatsapp.svg";
 import Image from "next/image";
 import { AlertPopup } from "components/AlertPopup";
@@ -21,6 +29,13 @@ interface ProfileInfo {
     linkedIn: string;
     showWhatsapp: boolean;
     showLinkedIn: boolean;
+    cv: {
+      data: {
+        attributes: {
+          url: string;
+        };
+      };
+    };
   };
 }
 
@@ -39,6 +54,8 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
   );
 
   // ================= EVENTS
+  const cvURL = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${profile?.attributes.cv.data.attributes.url}`;
+
   const handleOptionChange = (option: string) => {
     // Set the selected option
     setSelectedOption(option);
@@ -71,8 +88,9 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
       window.location.href = officeTelLink;
     } else if (option === "linkedin") {
       window.open(profile.attributes.linkedIn, "_blank");
+    } else if (option === "cv") {
+      window.open(cvURL, "_blank");
     }
-
     // Close the popup
     onClose();
   };
@@ -115,6 +133,9 @@ export const ConnectPopup: React.FC<ConnectPopupProps> = ({
             icon: <Linkedin color="#555557" />,
           },
         ]
+      : []),
+    ...(profile.attributes.cv
+      ? [{ value: "cv", label: "CV", icon: <FileText color="#555557" /> }]
       : []),
   ];
 

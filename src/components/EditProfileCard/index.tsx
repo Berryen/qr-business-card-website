@@ -38,6 +38,8 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const [countryCodeOffice, setCountryCodeOffice] = useState<string>("");
   const [officeNumber, setOfficeNumber] = useState<string>("");
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvPreviewURL, setCvPreviewURL] = useState<string | null>(null);
 
   // ================= HOOKS
   const pathname = usePathname();
@@ -96,6 +98,30 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
     }
   };
 
+  const uploadCv = async (cvFile: File) => {
+    const formData = new FormData();
+    formData.append("files", cvFile);
+
+    const uploadRes = await fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/upload`,
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    const uploadData = await uploadRes.json();
+
+    if (uploadRes.ok && uploadData.length > 0) {
+      return uploadData[0].id; // Return the ID of the uploaded CV
+    } else {
+      throw new Error("CV upload failed");
+    }
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -115,9 +141,14 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
 
       let profilePhotoId =
         profileData?.attributes.profilePhoto.data.attributes.id || null;
+      let cvId = profileData?.attributes.cv.data.attributes.id || null;
 
       if (profilePhoto) {
         profilePhotoId = await uploadProfilePhoto(profilePhoto);
+      }
+
+      if (cvFile) {
+        cvId = await uploadCv(cvFile);
       }
 
       // Now that you have the profile ID, update the profile
@@ -136,6 +167,10 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
 
       if (profilePhotoId) {
         updatedProfile.profilePhoto = profilePhotoId;
+      }
+
+      if (cvId) {
+        updatedProfile.cv = cvId;
       }
 
       const updateResponse = await fetch(
@@ -318,7 +353,48 @@ export const EditProfileCard: React.FC<ProfileProps> = () => {
                         accept="image/*" // Accept image files only
                       />
                     </div>
-                    <div className="flex flex-col space-y-2 w-1/2"></div>
+                    <div className="flex flex-col space-y-2 w-1/2">
+                      <label htmlFor="cv">CV / Resume</label>
+                      <input
+                        type="file"
+                        id="cv"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0] || null;
+                          setCvFile(file);
+
+                          if (file) {
+                            setCvPreviewURL(URL.createObjectURL(file)); // Create a local URL for preview
+                          } else {
+                            setCvPreviewURL(null); // Reset preview if no file is selected
+                          }
+                        }}
+                        accept=".pdf, .doc, .docx" // Accept PDF and Word documents
+                      />
+                      <button
+                        type="button"
+                        onClick={() => document.getElementById("cv")?.click()}
+                        className="bg-primary text-offwhite text-left rounded-xl px-4 py-4 focus:outline-none ring-1 ring-stroke focus:ring-2 focus:ring-stroke hover:bg-secondary"
+                      >
+                        {cvFile ? cvFile.name : "Choose File"}
+                      </button>
+                      {cvPreviewURL && (
+                        <a
+                          href={cvPreviewURL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500"
+                        >
+                          Preview CV
+                        </a>
+                      )}
+                      {!cvFile && profileData?.attributes.cv.data && (
+                        <p className="text-offgray">
+                          Current CV:{" "}
+                          {profileData.attributes.cv.data.attributes.name}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <div className="flex flex-row space-x-10">
                     <div className="flex flex-col space-y-2 w-1/2">
