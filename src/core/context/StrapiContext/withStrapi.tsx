@@ -2,12 +2,12 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { detectParams, urlChecker } from "helpers";
 import { initiateStrapiAPI } from "helpers/api";
 import { fetchStrapiAPI } from "helpers/api";
-import { YTLStrapiData } from "./@types";
+import { StrapiData } from "./@types";
 import { localeTranslation } from "helpers/locale";
 
 // custom getServerSideProps function
 export const withStrapiDataServerSideProps = (
-  callback?: (data: YTLStrapiData) => GetServerSideProps
+  callback?: (data: StrapiData) => GetServerSideProps
 ): GetServerSideProps => {
   const getServerSideProps: GetServerSideProps = async (
     ctx: GetServerSidePropsContext
@@ -53,7 +53,7 @@ export const withStrapiDataServerSideProps = (
 
     const global = globalConfig?.data;
     const customComponent = pageAttr?.customComponentName ?? null;
-    const dataContext: YTLStrapiData = {
+    const dataContext: StrapiData = {
       global,
       pageData,
       contentData,

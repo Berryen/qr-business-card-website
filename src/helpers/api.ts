@@ -80,32 +80,6 @@ export const fetchServiceNowAPI = async (
   });
   return response.json();
 };
-
-/**
- *
- * @param param0
- * @returns
- * pagedata
- * @example
- ```json
- {
-  id: 1,
-  attributes: {
-    createdAt: '2022-08-02T16:02:27.758Z',
-    updatedAt: '2022-09-23T02:45:00.555Z',
-    publishedAt: '2022-08-02T16:02:30.141Z',
-    blocks: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-    seo: {
-      id: 30,
-      metaTitle: 'Sustainability',
-      metaDescription: 'Malaysia is a developing and relatively young nation with a high urbanisation rate, factors which we believe will drive the demand for housing and thus infrastructure requirements. Cement and concrete, the world’s most used building material, naturally plays a crucial role in meeting these construction needs.\n' +
-        '\n' +
-        'As the country’s first and largest producer of cement and concrete, YTL Cement wants to lead the way in supporting the nation’s growing urbanisation and construction needs. We aspire to help build better and more sustainably together by firstly ensuring our progress in the environment, social, and governance fronts. Sustainability is at the heart of our strategy and operations. We will continue to focus and invest in product development, working with experts and our customers to develop products and solutions that are greener.',
-      metaImage: [Object]
-    },
-  }
-  ```
- */
 export const initiateStrapiAPI = async ({
   pageTitle,
   singleTypeApi,

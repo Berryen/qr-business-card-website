@@ -12,7 +12,7 @@ RUN mkdir -p /usr/src/app/ && cp -a /tmp/node_modules /usr/src/app/node_modules
 # AKA copy all the file into a container 
 FROM node:18.19.0-alpine3.18 AS bundle
 
-ARG APP_NAME=ytlwebsite
+ARG APP_NAME=qrcontact
 ENV app_name=${APP_NAME}
 RUN echo "-> $app_name"
 
@@ -25,7 +25,7 @@ RUN yarn build
 # --------------> The build image
 FROM node:18.19.0-alpine3.18 AS build
 
-ARG APP_NAME=ytlwebsite
+ARG APP_NAME=qrcontact
 ENV app_name=${APP_NAME}
 RUN echo "-> $app_name"
 

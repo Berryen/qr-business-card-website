@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { X, Copy, Download } from "react-feather";
 import QRCodeStyling from "@solana/qr-code-styling";
-import ytl_logo from "assets/ytl_logo.svg";
 import html2canvas from "html2canvas";
 import clsx from "clsx";
 import { AlertPopup } from "components/AlertPopup";
@@ -23,7 +22,6 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
 
   // ================= VARIABLES
   const currentURL = window.location.href;
-  const ytl_logoString = ytl_logo.src;
 
   // ================= EVENTS
   const generateQRCode = (): QRCodeStyling => {
@@ -31,7 +29,6 @@ export const QrCodePopup: React.FC<QrCodePopupProps> = ({
     const qrCode: QRCodeStyling = new QRCodeStyling({
       width: isMobileView ? 230 : 300,
       height: isMobileView ? 230 : 300,
-      // image: ytl_logoString,
       data: currentURL,
       backgroundOptions: {
         color: "#1e1e20",

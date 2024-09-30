@@ -1,1 +1,1 @@
-export * from "./YTLStrapiContext";
+export * from "./StrapiContext";

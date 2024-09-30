@@ -1,10 +1,10 @@
 import React from "react";
-import { useYTLStrapiDataHook } from "core/context/YTLStrapiContext";
+import { useStrapiDataHook } from "core/context/StrapiContext";
 import { useRouter } from "next/router";
 
 export const ErrorStatus: React.FC = () => {
   const router = useRouter();
-  const { global } = useYTLStrapiDataHook();
+  const { global } = useStrapiDataHook();
   const globalAttr = global?.attributes;
   const translationAttr = globalAttr?.globalTranslation;
 

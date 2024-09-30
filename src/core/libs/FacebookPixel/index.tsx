@@ -22,7 +22,7 @@ export const FacebookPixel: React.FC<{ appId: string }> = ({ appId }) => {
         strategy="lazyOnload"
         src={`https://www.facebook.com/tr?id=${appId}&ev=PageView&noscript=1`}
       />
-      <Script strategy="lazyOnload" id="facebook-ytl-website">
+      <Script strategy="lazyOnload" id="facebook-website">
         {`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

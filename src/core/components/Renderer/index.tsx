@@ -1,6 +1,6 @@
 // import { Fragment, useState, useEffect } from "react";
 // import CustomMeta from "components/CustomMeta";
-// import { useYTLStrapiDataHook } from "core/context/YTLStrapiContext";
+// import { useStrapiDataHook } from "core/context/StrapiContext";
 // import { renderScreen, RenderComponent } from "./helpers";
 
 // export const ComponentRenderer: React.FC<any> = () => {
@@ -14,7 +14,7 @@
 //     customComponent,
 //     getConditionalBlocks,
 //     getMetaDataFromContentData
-//   } = useYTLStrapiDataHook();
+//   } = useStrapiDataHook();
 //   // ================== EFFECTS
 //   useEffect(() => {
 //     if (!pageData && !contentData) return;

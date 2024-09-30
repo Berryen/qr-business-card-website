@@ -1,6 +1,4 @@
 import Head from "next/head";
-// import ytl_logo_icon from "assets/ytl_logo_icon.png";
-// import ytl_logo from "assets/ytl_logo.jpg";
 import logo_fyp from "assets/logo_fyp.png";
 
 // ================= INTERFACES / TYPES
@@ -17,7 +15,7 @@ interface ProfileInfo {
 
 export const Meta: React.FC<MetaProps> = ({ profile }) => {
   // ================= VARIABLES
-  const companyName = profile?.attributes.company || "YTL Cement";
+  const companyName = profile?.attributes.company || "";
   const name = profile?.attributes.name || "";
   const title = `${companyName}${name ? " | " + name : ""}`;
   const logo_icon = logo_fyp.src;

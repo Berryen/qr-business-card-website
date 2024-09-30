@@ -11,13 +11,7 @@
     "theme:viewer": "tailwind-config-viewer -p 5050",
     "locale:fix": "eslint --fix --ext .json --format node_modules/eslint-plugin-i18n-json/formatter.js public/locales/**/*",
     "cz": "git-cz",
-    "test": "jest --watch",
-    "staging:template:verify": "helm template deployment/charts/ytl-frontend-qr -f deployment/charts/ytl-frontend-qr/values.staging.yaml",
-    "production:template:verify": "helm template deployment/charts/ytl-frontend-qr -f deployment/charts/ytl-frontend-qr/values.production.yaml",
-    "staging:encrypt": "sops --encrypt deployment/charts/ytl-frontend-qr/secret.staging.yaml > deployment/charts/ytl-frontend-qr/secrets/secret.enc.staging.yaml",
-    "production:encrypt": "sops --encrypt deployment/charts/ytl-frontend-qr/secret.production.yaml > deployment/charts/ytl-frontend-qr/secrets/secret.enc.production.yaml",
-    "staging:decrypt": "sops --decrypt deployment/charts/ytl-frontend-qr/secrets/secret.enc.staging.yaml > deployment/charts/ytl-frontend-qr/secret.staging.yaml",
-    "production:decrypt": "sops --decrypt deployment/charts/ytl-frontend-qr/secrets/secret.enc.production.yaml > deployment/charts/ytl-frontend-qr/secret.production.yaml"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@microsoft/applicationinsights-react-js": "^17.0.3",

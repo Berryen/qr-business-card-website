@@ -1,5 +1,5 @@
 // data for context
-export type YTLStrapiData<P = any, C = any> = {
+export type StrapiData<P = any, C = any> = {
   global: any;
   pageData: P;
   contentData: C;
@@ -8,7 +8,7 @@ export type YTLStrapiData<P = any, C = any> = {
 };
 
 // context props
-export type YTLStrapiDataProps<P = any, C = any> = YTLStrapiData<P, C> & {
+export type StrapiDataProps<P = any, C = any> = StrapiData<P, C> & {
   getMetaData: () => any;
   getBlocks: (
     type: "page" | "content" | "custom",
@@ -20,8 +20,8 @@ export type YTLStrapiDataProps<P = any, C = any> = YTLStrapiData<P, C> & {
 };
 
 // component props for provider
-export type YTLStrapiDataProviderProps = Pick<
-  YTLStrapiDataProps,
+export type StrapiDataProviderProps = Pick<
+  StrapiDataProps,
   "global" | "pageData" | "contentData" | "customComponent" | "currentPage"
 > & {
   children?: React.ReactNode;

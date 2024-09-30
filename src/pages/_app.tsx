@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import Meta from "components/Meta";
 import {
   withStrapiDataServerSideProps,
-  YTLStrapiDataProvider,
+  StrapiDataProvider,
 } from "core/context";
 import { fetchStrapiAPI } from "helpers/api";
 import { useRouter } from "next/router";
@@ -36,10 +36,10 @@ function App({ Component, pageProps }: AppProps) {
 
   // ================== VIEWS
   return (
-    <YTLStrapiDataProvider global={globalData} {...pageProps}>
+    <StrapiDataProvider global={globalData} {...pageProps}>
       <GoogleAnalytics appId={gaTrackingId} />
       <Component {...pageProps} />
-    </YTLStrapiDataProvider>
+    </StrapiDataProvider>
   );
 }
 

@@ -1,17 +1,17 @@
 import React, { createContext } from "react";
 import get from "lodash/get";
 import find from "lodash/find";
-import { YTLStrapiDataProps, YTLStrapiDataProviderProps } from "./@types";
+import { StrapiDataProps, StrapiDataProviderProps } from "./@types";
 // ============== CONTEXT
-export const YTLStrapiDataContext = createContext<YTLStrapiDataProps>(
-  null as unknown as YTLStrapiDataProps
+export const StrapiDataContext = createContext<StrapiDataProps>(
+  null as unknown as StrapiDataProps
 );
 
 // consumer
-export const YTLStrapiDataConsumer = YTLStrapiDataContext.Consumer;
+export const StrapiDataConsumer = StrapiDataContext.Consumer;
 
 // provider
-export const YTLStrapiDataProvider: React.FC<YTLStrapiDataProviderProps> = (
+export const StrapiDataProvider: React.FC<StrapiDataProviderProps> = (
   props
 ) => {
   const {
@@ -20,7 +20,7 @@ export const YTLStrapiDataProvider: React.FC<YTLStrapiDataProviderProps> = (
     contentData,
     children,
     customComponent,
-    currentPage
+    currentPage,
   } = props || {};
   // ================== HELPERS
   const getContentDataBlocks = () =>
@@ -44,7 +44,7 @@ export const YTLStrapiDataProvider: React.FC<YTLStrapiDataProviderProps> = (
     return {
       siteName,
       siteURL,
-      canonicalURL
+      canonicalURL,
     };
   };
 
@@ -64,7 +64,7 @@ export const YTLStrapiDataProvider: React.FC<YTLStrapiDataProviderProps> = (
 
   // ================== VIEWS
   return (
-    <YTLStrapiDataContext.Provider
+    <StrapiDataContext.Provider
       value={{
         global,
         pageData,
@@ -75,10 +75,10 @@ export const YTLStrapiDataProvider: React.FC<YTLStrapiDataProviderProps> = (
         getContentDataBlocks,
         getConditionalBlocks,
         getMetaDataFromContentData,
-        currentPage
+        currentPage,
       }}
     >
       {children}
-    </YTLStrapiDataContext.Provider>
+    </StrapiDataContext.Provider>
   );
 };

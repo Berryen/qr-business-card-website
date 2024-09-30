@@ -3,7 +3,7 @@ import Script from "next/script";
 
 export const Hotjar: React.FC = () => {
   return (
-    <Script strategy="lazyOnload" id="hotjar-ytl-website">
+    <Script strategy="lazyOnload" id="hotjar-website">
       {`
         (function(h,o,t,j,a,r){
         h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};

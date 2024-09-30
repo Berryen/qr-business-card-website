@@ -3,7 +3,7 @@ const { publicRuntimeConfig, serverRuntimeConfig } = getConfig();
 
 // ================== URL
 const apiBaseUrl = publicRuntimeConfig.apiBaseUrl;
-const absoluteUrl = "https://strapi.ytlcement.com" || "http://localhost:1337";
+const absoluteUrl = "http://localhost:1337";
 
 // API ENDPOINT
 export const API_ENDPOINT = apiBaseUrl || absoluteUrl;
@@ -42,8 +42,6 @@ export const serviceNowUrl = publicRuntimeConfig.serviceNowUrl || "";
 
 // ================== MISCELLANEOUS
 // default icon url
-export const DEFAULT_ICON =
-  "https://ytlwebsitestorage.blob.core.windows.net/ytl-media/ytl-media/assets/ytl_362fdc2efa.jpg?updated_at=2022-03-24T11:16:44.414Z";
 
 // ================== MISCELLANEOUS
 export const cloudwatchGroupName = publicRuntimeConfig.cloudwatchGroupName;

@@ -22,7 +22,7 @@ import { QrCodePopup } from "components/QRCodePopup";
 import { Meta } from "components/Meta";
 import bg_other from "assets/bg_other.png";
 import Skeleton from "react-loading-skeleton";
-import { useYTLStrapiDataHook } from "core/context/YTLStrapiContext";
+import { useStrapiDataHook } from "core/context/StrapiContext";
 import ReactMarkdown from "react-markdown";
 import { useRouter } from "next/router";
 import { localeTranslation } from "helpers/locale";
@@ -43,7 +43,7 @@ export const Homepage: React.FC<ProfileProps> = ({
   profileData: profileDataProp,
 }) => {
   const router = useRouter();
-  const { global } = useYTLStrapiDataHook();
+  const { global } = useStrapiDataHook();
   const globalAttr = global?.attributes;
   const translationAttr = globalAttr?.globalTranslation;
 
